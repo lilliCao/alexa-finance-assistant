@@ -1,0 +1,11 @@
+Kontonummer
+IBAN
+Kontostand
+Eröffnungsdatum
+Abhebegebühr
+Zinssatz
+Kreditlimit
+Kreditkartenlimit
+Transaktionen
+Umsätze
+Überweisungen

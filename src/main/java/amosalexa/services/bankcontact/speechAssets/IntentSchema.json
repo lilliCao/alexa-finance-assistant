@@ -1,0 +1,22 @@
+{
+  "intents": [
+    {
+      "slots": [
+        {
+          "name": "BankKeyword",
+          "type": "LIST_OF_BANKS"
+        }
+      ],
+      "intent": "BankContactInformation"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}

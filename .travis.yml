@@ -1,0 +1,52 @@
+language: java
+jdk:
+- oraclejdk8
+
+script:
+  - ./gradlew buildZip
+  - echo $TRAVIS_BRANCH
+  - 'if [ "$TRAVIS_BRANCH" = "master" ]; then ./gradlew mytest; fi;'
+  - 'if [ "$TRAVIS_BRANCH" != "master" ]; then ./gradlew simpleTests; fi;'
+  - 'if [ "$TRAVIS_BRANCH" = "master" ]; then ./gradlew testReportAll; fi;'
+  - 'if [ "$TRAVIS_BRANCH" != "master" ]; then ./gradlew testReport; fi;'
+
+after_script:
+  - echo $CODECOV_TOKEN
+  - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+
+before_install:
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+
+deploy:
+  - provider: s3
+    on:
+      branch: develop
+    skip_cleanup: true
+    region: eu-west-1
+    local_dir: build/distributions
+    bucket: "amos-alexa"
+    access_key_id: AKIAJ2YBJ7X7V672KQCA
+    secret_access_key:
+      secure: oQIRb8g0bTOookEUqBw8AchIRksvWpVciXarRm2MSzIdUNXgq7OmBSCxMfFL5whnNKqKo2Fef4Xx9Bmdv/7AI0bc+0wMfzraDfwrmkM89xqMEVHvm8GEjJlaLMMro974VcO7chJ/6fsNwZtu/r/swa7HmDErkGgrAka6SZeopSWYXitucApB2cHRgu1+2pvgM3gTq1lsU5vgPqPGUtdH3vsEeX41XOA5gxLWQZaQkSF+7a1KOCH/o+QXBGiYfHArq7OoocY0za4ZB7BoHMtoXlSV/PqXtiCQKBVT/bAsTSXgAdDA4BWhLCBvJclzi1u9DKqfUllP4TmaIJ/aYCCGTcP3fxgcEy5ofhrNJnuyqflAzJAWfUkmhrqkkO9FPTwCJLXKmaOKJBb50gdPDT0hA1FGfiYbYN/9qX5vnJ685P9/cgwKFwHKz2c2fq5D7+czrbmXZYXA/4LuOqLhJK5g9rWD/Vb83KVtMUgxONWAeEAfCfm1uYB0jfttUQHWhltouIH7k96I/ogCRQyowofoFLHb2bNa5evm7uWvOsy2dwHZ1JOkEGnfF5Hn68Iw5Yx+YyCfuFZgymy7Bj71avfr9adTOnVooa0Vx0I660JAhGxsaDvaJwhz09yPa+5QC22j+rA/I5pJArSecz/3zZhwUozotYjKX7W/oZ+XUk8Rheg=
+
+  - provider: s3
+    on:
+      branch: master
+      tags: true
+      condition: "$TRAVIS_TAG =~ ^sprint-.*-release.*$"
+    skip_cleanup: true
+    region: eu-west-1
+    local_dir: build/distributions
+    bucket: "amos-alexa-release"
+    access_key_id: AKIAJ2YBJ7X7V672KQCA
+    secret_access_key:
+      secure: oQIRb8g0bTOookEUqBw8AchIRksvWpVciXarRm2MSzIdUNXgq7OmBSCxMfFL5whnNKqKo2Fef4Xx9Bmdv/7AI0bc+0wMfzraDfwrmkM89xqMEVHvm8GEjJlaLMMro974VcO7chJ/6fsNwZtu/r/swa7HmDErkGgrAka6SZeopSWYXitucApB2cHRgu1+2pvgM3gTq1lsU5vgPqPGUtdH3vsEeX41XOA5gxLWQZaQkSF+7a1KOCH/o+QXBGiYfHArq7OoocY0za4ZB7BoHMtoXlSV/PqXtiCQKBVT/bAsTSXgAdDA4BWhLCBvJclzi1u9DKqfUllP4TmaIJ/aYCCGTcP3fxgcEy5ofhrNJnuyqflAzJAWfUkmhrqkkO9FPTwCJLXKmaOKJBb50gdPDT0hA1FGfiYbYN/9qX5vnJ685P9/cgwKFwHKz2c2fq5D7+czrbmXZYXA/4LuOqLhJK5g9rWD/Vb83KVtMUgxONWAeEAfCfm1uYB0jfttUQHWhltouIH7k96I/ogCRQyowofoFLHb2bNa5evm7uWvOsy2dwHZ1JOkEGnfF5Hn68Iw5Yx+YyCfuFZgymy7Bj71avfr9adTOnVooa0Vx0I660JAhGxsaDvaJwhz09yPa+5QC22j+rA/I5pJArSecz/3zZhwUozotYjKX7W/oZ+XUk8Rheg=
+
+after_deploy:
+  - aws lambda update-function-code --function-name amos-alexa --publish --s3-bucket amos-alexa --s3-key amos-ss17-alexa-fat-1.0.zip
+  - aws lambda update-function-code --function-name amos-alexa-release --publish --s3-bucket amos-alexa-release --s3-key amos-ss17-alexa-fat-1.0.zip
+
+notifications:
+  slack:
+    secure: W8BBgq2WMGHp+I9Y0o0Dflp7jKOuhcgEkwQWCO8Q6az1Ba6clQOkQX7r11RgHfBKeTVlsDbA06jt8FXoTi9DUtGmEwkl335hHy5OEojAgFUQHPcK/FDK1vEIasTNaZdlXdUtQivehstkFLp4heDHu+0QhKivyEY5ER5ItzB9vN1wDAhMGqu+zKFXRdVVG3ZKKnvgAtE2OGr6zdiIZBXjcM3XGp3adFsIrdP2/zfUnklecUkAc7+M86AT+6rIie/R3dFx80mnqSZXjRJOCRcr2txcQpaHluWbuo/iM6HgY467tBXJyF48TaxCkguLU2SxXHU4hK0PlqDAqvJhwZ9x6IpjyY4AUlbkuOf05xuYD/HwMQQQ8hgVJIXLSO8G8f4tBZRg1zDktpTo19WIFU1k2JHjQchfo7gEr874gA3QaYYP6rjYwDa6pSwtnBNdMx0vKm83DT9x1pRZ1jRpIXJumzqGu9BRHVJ37uqOw87HB8U18AF0CvsOzmr/gEYg0tTxdnAcMTAho3c+dAiRW0s/HfVPvcbNCGfdcsc5dK+lVfhcGV+HCLHZ5L5FmgEDEalifyaK0x7RXi5aC29U6n6pInoS62t+tbZ1gqydWhXfS7XERXHxT7ChPIY/JEIVrUnAt8hIe776BBNZ5EI9b5KPiOzsKOlCUxGShrDbCDyHOYU=

@@ -1,0 +1,1218 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "amos",
+      "intents": [
+        {
+          "name": "AMAZON.ResumeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.PauseIntent",
+          "samples": []
+        },
+        {
+          "name": "ProductRequestIntent",
+          "slots": [
+            {
+              "name": "ProductKeyword",
+              "type": "LIST_OF_KEYWORDS"
+            }
+          ],
+          "samples": [
+            "Ich brauche ein {ProductKeyword}",
+            "Ich wollte ein {ProductKeyword} kaufen"
+          ]
+        },
+        {
+          "name": "SecuritiesAccountInformationIntent",
+          "slots": [],
+          "samples": [
+            "Wie sind meine Aktien",
+            "Wie ist der Stand meiner Aktien",
+            "Nenne mir meine Aktien",
+            "Wie ist mein Depotstatus"
+          ]
+        },
+        {
+          "name": "AccountInformation",
+          "slots": [
+            {
+              "name": "AccountInformationSlots",
+              "type": "LIST_OF_ACCOUNT_INFORMATION"
+            }
+          ],
+          "samples": [
+            "Wie ist mein {AccountInformationSlots}",
+            "Wie ist meine {AccountInformationSlots}",
+            "Was ist mein {AccountInformationSlots}",
+            "Was ist meine {AccountInformationSlots}",
+            "Wie hoch ist mein {AccountInformationSlots}",
+            "Wie hoch ist meine {AccountInformationSlots}",
+            "Was sind meine {AccountInformationSlots}",
+            "Was sind mein {AccountInformationSlots}"
+          ]
+        },
+        {
+          "name": "BankOpeningHours",
+          "slots": [
+            {
+              "name": "OpeningHoursDate",
+              "type": "AMAZON.DATE"
+            },
+            {
+              "name": "BankNameSlots",
+              "type": "LIST_OF_BANKS"
+            }
+          ],
+          "samples": [
+            "Öffnungszeiten",
+            "Öffnungszeiten meiner Bank",
+            "Wann hat die {BankNameSlots} am {OpeningHoursDate} geöffnet",
+            "Wann hat die {BankNameSlots} geöffnet",
+            "{BankNameSlots} Öffnungszeiten",
+            "Öffnungszeiten der {BankNameSlots}",
+            "wann hat {BankNameSlots} offen",
+            "hat die {BankNameSlots} {OpeningHoursDate} geöffnet"
+          ]
+        },
+        {
+          "name": "BankAddress",
+          "slots": [
+            {
+              "name": "BankNameSlots",
+              "type": "LIST_OF_BANKS"
+            }
+          ],
+          "samples": [
+            "Bankadresse",
+            "Wo finde ich meine Bank",
+            "Wo ist meine Bank",
+            "Wie ist die Adresse von {BankNameSlots}",
+            "Wo ist die {BankNameSlots}",
+            "gib mir die Adresse von {BankNameSlots}",
+            "suche die {BankNameSlots} in der nähe",
+            "wo ist die nächste {BankNameSlots}",
+            "finde die nächste {BankNameSlots}"
+          ]
+        },
+        {
+          "name": "BankTelephone",
+          "slots": [
+            {
+              "name": "BankNameSlots",
+              "type": "LIST_OF_BANKS"
+            }
+          ],
+          "samples": [
+            "wie ist die telefonnummer meiner bank",
+            "wie lautet die telephonnummer meiner bank",
+            "gib mir die telephonnummer meiner bank",
+            "wie ist die nummer meiner bank",
+            "finde die nummer meiner bank",
+            "was ist die telefonnummer meiner bank",
+            "wie ist die telefonnummer {BankNameSlots}",
+            "wie lautet die telephonnummer {BankNameSlots}",
+            "gib mir die telephonnummer {BankNameSlots}",
+            "wie ist die nummer {BankNameSlots}",
+            "finde die nummer {BankNameSlots}",
+            "was ist die telefonnummer {BankNameSlots}"
+          ]
+        },
+        {
+          "name": "AMAZON.YesIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NoIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "IntroductionIntent",
+          "slots": [],
+          "samples": [
+            "Was kann AMOS",
+            "Was kannst du eigentlich",
+            "Was kann ich fragen",
+            "Hilfe"
+          ]
+        },
+        {
+          "name": "FunctionGroupOverviewIntent",
+          "slots": [],
+          "samples": [
+            "Übersicht über Kategorien"
+          ]
+        },
+        {
+          "name": "FunctionGroupIntent",
+          "slots": [
+            {
+              "name": "FunctionGroup",
+              "type": "LIST_OF_FUNCTION_GROUPS"
+            }
+          ],
+          "samples": [
+            "Mehr über Kategorie {FunctionGroup}"
+          ]
+        },
+        {
+          "name": "PlainNumberIntent",
+          "slots": [
+            {
+              "name": "Number",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "{Number}"
+          ]
+        },
+        {
+          "name": "PlainEuroIntent",
+          "slots": [
+            {
+              "name": "Number",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "{Number} Euro"
+          ]
+        },
+        {
+          "name": "PlainYearsIntent",
+          "slots": [
+            {
+              "name": "Number",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "{Number} Jahre",
+            "{Number} Jahr"
+          ]
+        },
+        {
+          "name": "SavingsPlanIntroIntent",
+          "slots": [
+            {
+              "name": "Betrag",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Erstelle einen Sparplan",
+            "Berechne mir einen Sparplan",
+            "Berechne mir einen Sparplan mit einem Grundsparbetrag von {Betrag} Euro",
+            "Berechne mir einen Sparplan mit einem monatlichen Einzahlungsbetrag von {Betrag} Euro",
+            "Ich moechte monatlich Geld sparen"
+          ]
+        },
+        {
+          "name": "SavingsPlanChangeParameterIntent",
+          "slots": [
+            {
+              "name": "SavingsPlanParameter",
+              "type": "LIST_OF_SAVINGS_PLAN_PARAMETER"
+            }
+          ],
+          "samples": [
+            "{SavingsPlanParameter}",
+            "Ändere den {SavingsPlanParameter}",
+            "Ändere die {SavingsPlanParameter}"
+          ]
+        },
+        {
+          "name": "SavingsPlanNewIntent",
+          "slots": [],
+          "samples": [
+            "Neu",
+            "Neu beginnen"
+          ]
+        },
+        {
+          "name": "StandingOrdersDeleteIntent",
+          "slots": [
+            {
+              "name": "Number",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Lösche Dauerauftrag Nummer {Number}"
+          ]
+        },
+        {
+          "name": "StandingOrderSmartIntent",
+          "slots": [
+            {
+              "name": "Payee",
+              "type": "AMAZON.DE_FIRST_NAME"
+            },
+            {
+              "name": "PayeeSecondName",
+              "type": "PAYEE_SECOND_NAME"
+            },
+            {
+              "name": "orderAmount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Richte einen neuen Dauerauftrag für {Payee} {PayeeSecondName} in Höhe von {orderAmount} Euro ein",
+            "Richte Dauerauftrag für {Payee} {PayeeSecondName} über von {orderAmount} Euro ein",
+            "Richte einen neuen Dauerauftrag ein",
+            "Richte einen neuen",
+            "Richte einfach einen neuen Dauerauftrag ein"
+          ]
+        },
+        {
+          "name": "StandingOrdersInfoIntent",
+          "slots": [
+            {
+              "name": "Channel",
+              "type": "LIST_OF_CHANNEL"
+            },
+            {
+              "name": "Payee",
+              "type": "AMAZON.DE_FIRST_NAME"
+            }
+          ],
+          "samples": [
+            "Daueraufträge",
+            "Wie lauten meine Daueraufträge",
+            "Wie sind meine Daueraufträge",
+            "Was sind meine Daueraufträge",
+            "Nenne mir meine Daueraufträge",
+            "Sende Daueraufträge per {Channel}",
+            "Daueraufträge an {Payee}"
+          ]
+        },
+        {
+          "name": "StandingOrdersModifyIntent",
+          "slots": [
+            {
+              "name": "Number",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "ExecutionRate",
+              "type": "LIST_OF_EXECUTION_RATES"
+            },
+            {
+              "name": "FirstExecution",
+              "type": "AMAZON.DATE"
+            }
+          ],
+          "samples": [
+            "Ändere den Betrag von Dauerauftrag Nummer {Number} auf {Amount} Euro",
+            "Ändere den Ausführungsrhythmus von Dauerauftrag Nummer {Number} auf {ExecutionRate} beginnend am {FirstExecution}"
+          ]
+        },
+        {
+          "name": "StandingOrdersKeywordIntent",
+          "slots": [
+            {
+              "name": "StandingOrderKeyword",
+              "type": "LIST_OF_STANDING_ORDER_KEYWORDS"
+            },
+            {
+              "name": "TransactionKeyword",
+              "type": "LIST_OF_TRANSACTION_KEYWORDS"
+            }
+          ],
+          "samples": [
+            "Wie viel bezahle ich für {StandingOrderKeyword}",
+            "Wie viel bezahle ich monatlich für {StandingOrderKeyword}",
+            "Welchen Betrag bezahle ich für {StandingOrderKeyword}",
+            "Welchen Betrag bezahle ich monatlich für {StandingOrderKeyword}",
+            "Wie sind meine monatlichen {TransactionKeyword}"
+          ]
+        },
+        {
+          "name": "ReplacementCardIntent",
+          "slots": [],
+          "samples": [
+            "Bestelle eine Ersatzkarte",
+            "Ich brauche eine Ersatzkarte"
+          ]
+        },
+        {
+          "name": "ReplacementCardReasonIntent",
+          "slots": [
+            {
+              "name": "ReplacementReason",
+              "type": "LIST_OF_REPLACEMENT_REASONS"
+            }
+          ],
+          "samples": [
+            "Die Karte ist {ReplacementReason}",
+            "Die alte Karte wurde {ReplacementReason}",
+            "Die alte Karte ist {ReplacementReason}",
+            "Meine Karte wurde {ReplacementReason}",
+            "Meine Karte ist {ReplacementReason}",
+            "Meine alte Karte wurde {ReplacementReason}",
+            "Meine alte Karte ist {ReplacementReason}",
+            "{ReplacementReason}"
+          ]
+        },
+        {
+          "name": "BlockCardIntent",
+          "slots": [
+            {
+              "name": "BankCardNumber",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Sperre Karte {BankCardNumber}"
+          ]
+        },
+        {
+          "name": "BankTransferIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "Name",
+              "type": "AMAZON.DE_FIRST_NAME"
+            }
+          ],
+          "samples": [
+            "Überweise {Amount} Euro an {Name}"
+          ]
+        },
+        {
+          "name": "SetBalanceLimitIntent",
+          "slots": [
+            {
+              "name": "BalanceLimitAmount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Setze mein Kontolimit auf {BalanceLimitAmount} Euro",
+            "Setze das Limit für mein Konto auf {BalanceLimitAmount} Euro",
+            "Setze mein Limit auf {BalanceLimitAmount} Euro",
+            "Ich möchte mein Limit auf {BalanceLimitAmount} Euro setzen",
+            "Ich möchte mein Kontolimit auf {BalanceLimitAmount} Euro setzen"
+          ]
+        },
+        {
+          "name": "GetBalanceLimitIntent",
+          "slots": [],
+          "samples": [
+            "Wie ist mein Kontolimit",
+            "Wie ist das Limit für mein Konto",
+            "Nach meinem Kontolimit",
+            "Nach dem Limit für mein Konto"
+          ]
+        },
+        {
+          "name": "ListTransferTemplatesIntent",
+          "slots": [],
+          "samples": [
+            "Überweisungsvorlagen"
+          ]
+        },
+        {
+          "name": "DeleteTransferTemplatesIntent",
+          "slots": [
+            {
+              "name": "TemplateID",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Lösche Vorlage {TemplateID}"
+          ]
+        },
+        {
+          "name": "EditTransferTemplateIntent",
+          "slots": [
+            {
+              "name": "TemplateID",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "NewAmount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Ändere Betrag von Vorlage {TemplateID} auf {NewAmount} "
+          ]
+        },
+        {
+          "name": "ContactListInfoIntent",
+          "slots": [],
+          "samples": [
+            "Was sind meine Kontakte",
+            "Kontaktliste"
+          ]
+        },
+        {
+          "name": "ContactAddIntent",
+          "slots": [
+            {
+              "name": "TransactionNumber",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Speichere Details von Transaktion {TransactionNumber} als Kontakt"
+          ]
+        },
+        {
+          "name": "ContactDeleteIntent",
+          "slots": [
+            {
+              "name": "ContactID",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Lösche Kontakt Nummer {ContactID}",
+            "Lösche Kontakt {ContactID}"
+          ]
+        },
+        {
+          "name": "AffordProduct",
+          "slots": [
+            {
+              "name": "ProductKeyword",
+              "type": "LIST_OF_KEYWORDS"
+            },
+            {
+              "name": "ProductSelection",
+              "type": "LIST_OF_SELECTABLE_PRODUCTS"
+            }
+          ],
+          "samples": [
+            "Ich suche {ProductKeyword}",
+            "Was kostet ein {ProductKeyword}",
+            "Was kostet eine {ProductKeyword}",
+            "Was kostet das {ProductKeyword}",
+            "Was kostet die {ProductKeyword}",
+            "Was kostet der {ProductKeyword}",
+            "Sag mir den Preis von {ProductKeyword}",
+            "Sag mir den Preis vom {ProductKeyword}",
+            "Wie viel kostet ein {ProductKeyword}",
+            "Wie viel kostet eine {ProductKeyword}",
+            "Wie viel kostet das {ProductKeyword}",
+            "Wie viel kostet der {ProductKeyword}",
+            "Wie viel kostet die {ProductKeyword}",
+            "produkt {ProductSelection}"
+          ]
+        },
+        {
+          "name": "PlainCategoryIntent",
+          "slots": [
+            {
+              "name": "Category",
+              "type": "LIST_OF_CATEGORIES"
+            }
+          ],
+          "samples": [
+            "{Category}",
+            "Kategorie {Category}"
+          ]
+        },
+        {
+          "name": "CategoryStatusInfoIntent",
+          "slots": [
+            {
+              "name": "Category",
+              "type": "LIST_OF_CATEGORIES"
+            }
+          ],
+          "samples": [
+            "Wie ist der Status für Kategorie {Category}",
+            "Wie ist der Status für {Category}"
+          ]
+        },
+        {
+          "name": "CategoryLimitInfoIntent",
+          "slots": [
+            {
+              "name": "Category",
+              "type": "LIST_OF_CATEGORIES"
+            }
+          ],
+          "samples": [
+            "Wie ist das Limit für {Category}",
+            "Wie ist das Limit für Kategorie {Category}"
+          ]
+        },
+        {
+          "name": "CategoryLimitSetIntent",
+          "slots": [
+            {
+              "name": "Category",
+              "type": "LIST_OF_CATEGORIES"
+            },
+            {
+              "name": "CategoryLimit",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Ändere Limit für {Category} auf {CategoryLimit} Euro",
+            "Ändere Limit für Kategorie {Category} auf {CategoryLimit} Euro",
+            "Setze Limit für {Category} auf {CategoryLimit} Euro",
+            "Setze Limit für Kategorie {Category} auf {CategoryLimit} Euro"
+          ]
+        },
+        {
+          "name": "CategorySpendingIntent",
+          "slots": [
+            {
+              "name": "Category",
+              "type": "LIST_OF_CATEGORIES"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Speichere {Amount} Euro",
+            "Speichere {Amount} Euro für Kategorie {Category}",
+            "Speichere {Amount} Euro für {Category}",
+            "Ich habe {Amount} Euro für {Category} ausgegeben"
+          ]
+        },
+        {
+          "name": "BudgetReportEMailIntent",
+          "slots": [],
+          "samples": [
+            "Sende mir meinen Ausgabenreport",
+            "Schicke mir den Ausgabenreport",
+            "Sende mir meinen Budget Report",
+            "Schicke mir den Budget Report"
+          ]
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "ContactTransferIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "Contact",
+              "type": "LIST_OF_EXAMPLE_CONTACTS"
+            }
+          ],
+          "samples": [
+            "Überweise {Amount} Euro an {Contact}"
+          ]
+        },
+        {
+          "name": "ContactChoiceIntent",
+          "slots": [
+            {
+              "name": "ContactIndex",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Kontakt Nummer {ContactIndex}",
+            "{ContactIndex}"
+          ]
+        },
+        {
+          "name": "ShowCategoriesIntent",
+          "slots": [],
+          "samples": [
+            "zeig mir meine Kategorien"
+          ]
+        },
+        {
+          "name": "DeleteCategoryIntent",
+          "slots": [
+            {
+              "name": "CategoryName",
+              "type": "LIST_OF_CATEGORIES"
+            }
+          ],
+          "samples": [
+            "loesche die Kategorie {CategoryName}"
+          ]
+        },
+        {
+          "name": "AddCategoryIntent",
+          "slots": [
+            {
+              "name": "CategoryName",
+              "type": "LIST_OF_CATEGORIES"
+            }
+          ],
+          "samples": [
+            "erstelle die Kategorie {CategoryName}",
+            "fuege die Kategorie {CategoryName} hinzu"
+          ]
+        },
+        {
+          "name": "PeriodicTransactionListIntent",
+          "slots": [],
+          "samples": [
+            "Wie sind meine periodischen Transaktionen",
+            "Liste mir meine periodischen Transaktionen auf",
+            "Periodische Transaktionen"
+          ]
+        },
+        {
+          "name": "PeriodicTransactionAddIntent",
+          "slots": [
+            {
+              "name": "TransactionNumber",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Markiere Transaktion {TransactionNumber} als periodisch",
+            "Markiere Transaktion Nummer {TransactionNumber} als periodisch"
+          ]
+        },
+        {
+          "name": "PeriodicTransactionDeleteIntent",
+          "slots": [
+            {
+              "name": "TransactionNumber",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Lösche Kennzeichnung periodisch für Transaktion {TransactionNumber}",
+            "Lösche Markierung periodisch für Transaktion {TransactionNumber}"
+          ]
+        },
+        {
+          "name": "TransactionForecast",
+          "slots": [],
+          "samples": [
+            "Welche Transaktionen erwarten mich in der zunkunft",
+            "Was sind meine zukünftigen Transaktionen",
+            "Zukünftige Transaktionen",
+            "Welche Transaktionen kommen auf mich zu"
+          ]
+        },
+        {
+          "name": "AccountBalanceForecast",
+          "slots": [
+            {
+              "name": "TargetDate",
+              "type": "AMAZON.DATE"
+            }
+          ],
+          "samples": [
+            "sag mir mein Kontostand vorraus",
+            "was wird mein Kontostand am {TargetDate} sein",
+            "wie wird mein Kontostand am {TargetDate} sein",
+            "kontostandvorhersage"
+          ]
+        },
+        {
+          "name": "PlainDate",
+          "slots": [
+            {
+              "name": "TargetDate",
+              "type": "AMAZON.DATE"
+            }
+          ],
+          "samples": [
+            "Bis zum {TargetDate}",
+            "{TargetDate}",
+            "am {TargetDate}"
+          ]
+        },
+        {
+          "name": "FutureIntent",
+          "slots": [],
+          "samples": [
+            "Spring in die Zukunft"
+          ]
+        },
+        {
+          "name": "PastIntent",
+          "slots": [],
+          "samples": [
+            "Spring in die Vergangenheit"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        }
+      ],
+      "types": [
+        {
+          "name": "AMAZON.DE_FIRST_NAME",
+          "values": [
+            {
+              "name": {
+                "value": "jan"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_KEYWORDS",
+          "values": [
+            {
+              "name": {
+                "value": "iphone"
+              }
+            },
+            {
+              "name": {
+                "value": "sony"
+              }
+            },
+            {
+              "name": {
+                "value": "asus"
+              }
+            },
+            {
+              "name": {
+                "value": "apple"
+              }
+            },
+            {
+              "name": {
+                "value": "huawei"
+              }
+            },
+            {
+              "name": {
+                "value": "panasonic"
+              }
+            },
+            {
+              "name": {
+                "value": "lenovo"
+              }
+            },
+            {
+              "name": {
+                "value": "dell"
+              }
+            },
+            {
+              "name": {
+                "value": "smartphone"
+              }
+            },
+            {
+              "name": {
+                "value": "samsung galaxy"
+              }
+            },
+            {
+              "name": {
+                "value": "notebook"
+              }
+            },
+            {
+              "name": {
+                "value": "handy"
+              }
+            },
+            {
+              "name": {
+                "value": "laptop"
+              }
+            },
+            {
+              "name": {
+                "value": "amazon echo"
+              }
+            },
+            {
+              "name": {
+                "value": "echo dot"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_ACCOUNT_INFORMATION",
+          "values": [
+            {
+              "name": {
+                "value": "Kontonummer"
+              }
+            },
+            {
+              "name": {
+                "value": "IBAN"
+              }
+            },
+            {
+              "name": {
+                "value": "Kontostand"
+              }
+            },
+            {
+              "name": {
+                "value": "Eröffnungsdatum"
+              }
+            },
+            {
+              "name": {
+                "value": "Abhebegebühr"
+              }
+            },
+            {
+              "name": {
+                "value": "Zinssatz"
+              }
+            },
+            {
+              "name": {
+                "value": "Kreditlimit"
+              }
+            },
+            {
+              "name": {
+                "value": "Kreditkartenlimit"
+              }
+            },
+            {
+              "name": {
+                "value": "Transaktionen"
+              }
+            },
+            {
+              "name": {
+                "value": "Umsätze"
+              }
+            },
+            {
+              "name": {
+                "value": "Überweisungen"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_BANKS",
+          "values": [
+            {
+              "name": {
+                "value": "Deutsche Bank"
+              }
+            },
+            {
+              "name": {
+                "value": "Sparkasse"
+              }
+            },
+            {
+              "name": {
+                "value": "ING Diba"
+              }
+            },
+            {
+              "name": {
+                "value": "Raiffeisenbank"
+              }
+            },
+            {
+              "name": {
+                "value": "Commerzbank"
+              }
+            },
+            {
+              "name": {
+                "value": "KfW"
+              }
+            },
+            {
+              "name": {
+                "value": "Unicredit Bank"
+              }
+            },
+            {
+              "name": {
+                "value": "Postbank"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_FUNCTION_GROUPS",
+          "values": [
+            {
+              "name": {
+                "value": "Produktanfrage"
+              }
+            },
+            {
+              "name": {
+                "value": "Kontoinformation"
+              }
+            },
+            {
+              "name": {
+                "value": "Smart Financing"
+              }
+            },
+            {
+              "name": {
+                "value": "Online Banking"
+              }
+            },
+            {
+              "name": {
+                "value": "Budget"
+              }
+            },
+            {
+              "name": {
+                "value": "Bank-Kontakt"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_CATEGORIES",
+          "values": [
+            {
+              "name": {
+                "value": "Auto"
+              }
+            },
+            {
+              "name": {
+                "value": "Haushalt"
+              }
+            },
+            {
+              "name": {
+                "value": "Freizeit"
+              }
+            },
+            {
+              "name": {
+                "value": "Reisen"
+              }
+            },
+            {
+              "name": {
+                "value": "Sonstiges"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_SAVINGS_PLAN_PARAMETER",
+          "values": [
+            {
+              "name": {
+                "value": "Grundbetrag"
+              }
+            },
+            {
+              "name": {
+                "value": "Laufzeit"
+              }
+            },
+            {
+              "name": {
+                "value": "Monatliche Einzahlung"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PAYEE_SECOND_NAME",
+          "values": [
+            {
+              "name": {
+                "value": "Mustermann"
+              }
+            },
+            {
+              "name": {
+                "value": "Kaufmann"
+              }
+            },
+            {
+              "name": {
+                "value": "Müller"
+              }
+            },
+            {
+              "name": {
+                "value": "Miller"
+              }
+            },
+            {
+              "name": {
+                "value": "Bachman"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_CHANNEL",
+          "values": [
+            {
+              "name": {
+                "value": "email"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_EXECUTION_RATES",
+          "values": [
+            {
+              "name": {
+                "value": "monatlich"
+              }
+            },
+            {
+              "name": {
+                "value": "vierteljährlich"
+              }
+            },
+            {
+              "name": {
+                "value": "halbjährlich"
+              }
+            },
+            {
+              "name": {
+                "value": "jährlich"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_STANDING_ORDER_KEYWORDS",
+          "values": [
+            {
+              "name": {
+                "value": "Strom"
+              }
+            },
+            {
+              "name": {
+                "value": "Miete"
+              }
+            },
+            {
+              "name": {
+                "value": "Internet"
+              }
+            },
+            {
+              "name": {
+                "value": "Handyvertrag"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_TRANSACTION_KEYWORDS",
+          "values": [
+            {
+              "name": {
+                "value": "Ersparnisse"
+              }
+            },
+            {
+              "name": {
+                "value": "Einkuenfte"
+              }
+            },
+            {
+              "name": {
+                "value": "Ausgaben"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_REPLACEMENT_REASONS",
+          "values": [
+            {
+              "name": {
+                "value": "beschaedigt"
+              }
+            },
+            {
+              "name": {
+                "value": "gesperrt"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_SELECTABLE_PRODUCTS",
+          "values": [
+            {
+              "name": {
+                "value": "a"
+              }
+            },
+            {
+              "name": {
+                "value": "b"
+              }
+            },
+            {
+              "name": {
+                "value": "c"
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIST_OF_EXAMPLE_CONTACTS",
+          "values": [
+            {
+              "name": {
+                "value": "Max Musterman"
+              }
+            },
+            {
+              "name": {
+                "value": "Lucas"
+              }
+            },
+            {
+              "name": {
+                "value": "Sandra"
+              }
+            },
+            {
+              "name": {
+                "value": "Bob"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

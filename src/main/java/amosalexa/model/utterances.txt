@@ -1,0 +1,286 @@
+****************************bank account**************************************
+AccountInformation
+Wie ist mein {AccountInformationSlots}
+Wie ist meine {AccountInformationSlots}
+Was ist mein {AccountInformationSlots}
+Was ist meine {AccountInformationSlots}
+Wie hoch ist mein {AccountInformationSlots}
+Wie hoch ist meine {AccountInformationSlots}
+Was sind meine {AccountInformationSlots}
+Was sind mein {AccountInformationSlots}
+
+SetBalanceLimitIntent
+Setze mein Kontolimit auf {BalanceLimitAmount} Euro
+Setze das Limit für mein Konto auf {BalanceLimitAmount} Euro
+Setze mein Limit auf {BalanceLimitAmount} Euro
+Ich möchte mein Limit auf {BalanceLimitAmount} Euro setzen
+Ich möchte mein Kontolimit auf {BalanceLimitAmount} Euro setzen
+
+GetBalanceLimitIntent
+Wie ist mein Kontolimit
+Wie ist das Limit für mein Konto
+Nach meinem Kontolimit
+Nach dem Limit für mein Konto
+
+ContactTransferIntent
+Überweise {Amount} Euro an {Contact}
+
+ContactChoiceIntent
+Kontakt Nummer {ContactIndex}
+{ContactIndex}
+
+StandingOrdersInfoIntent
+Daueraufträge
+Wie lauten meine Daueraufträge
+Wie sind meine Daueraufträge
+Was sind meine Daueraufträge
+Nenne mir meine Daueraufträge
+Sende Daueraufträge per {Channel}
+Daueraufträge an {Payee}
+
+StandingOrdersModifyIntent
+Ändere den Betrag von Dauerauftrag Nummer {Number} auf {Amount} Euro
+Ändere den Ausführungsrhythmus von Dauerauftrag Nummer {Number} auf {ExecutionRate} beginnend am {FirstExecution}
+
+StandingOrdersKeywordIntent
+Wie viel bezahle ich für {StandingOrderKeyword}
+Wie viel bezahle ich monatlich für {StandingOrderKeyword}
+Welchen Betrag bezahle ich für {StandingOrderKeyword}
+Welchen Betrag bezahle ich monatlich für {StandingOrderKeyword}
+Wie sind meine monatlichen {TransactionKeyword}
+
+StandingOrdersDeleteIntent
+Lösche Dauerauftrag Nummer {Number}
+
+StandingOrderSmartIntent
+Richte einen neuen Dauerauftrag für {Payee} {PayeeSecondName} in Höhe von {orderAmount} Euro ein
+Richte Dauerauftrag für {Payee} {PayeeSecondName} über von {orderAmount} Euro ein
+Richte einen neuen Dauerauftrag ein
+Richte einen neuen
+Richte einfach einen neuen Dauerauftrag ein
+
+****************************bank contact**************************************
+BankOpeningHours
+Öffnungszeiten
+Öffnungszeiten meiner Bank
+Wann hat die {BankNameSlots} am {OpeningHoursDate} geöffnet
+Wann hat die {BankNameSlots} geöffnet
+{BankNameSlots} Öffnungszeiten
+Öffnungszeiten der {BankNameSlots}
+wann hat {BankNameSlots} offen
+hat die {BankNameSlots} {OpeningHoursDate} geöffnet
+
+BankAddress
+Bankadresse
+Wo finde ich meine Bank
+Wo ist meine Bank
+Wie ist die Adresse von {BankNameSlots}
+Wo ist die {BankNameSlots}
+gib mir die Adresse von {BankNameSlots}
+suche die {BankNameSlots} in der nähe
+wo ist die nächste {BankNameSlots}
+finde die nächste {BankNameSlots}
+
+BankTelephone
+wie ist die telefonnummer meiner bank
+wie lautet die telephonnummer meiner bank
+gib mir die telephonnummer meiner bank
+wie ist die nummer meiner bank
+finde die nummer meiner bank
+was ist die telefonnummer meiner bank
+wie ist die telefonnummer {BankNameSlots}
+wie lautet die telephonnummer {BankNameSlots}
+gib mir die telephonnummer {BankNameSlots}
+wie ist die nummer {BankNameSlots}
+finde die nummer {BankNameSlots}
+was ist die telefonnummer {BankNameSlots}
+
+****************************budget report*************************************
+BudgetReportEMailIntent
+Sende mir meinen Ausgabenreport
+Schicke mir den Ausgabenreport
+Sende mir meinen Budget Report
+Schicke mir den Budget Report
+
+****************************budget tracker************************************
+ShowCategoriesIntent
+zeig mir meine Kategorien
+
+DeleteCategoryIntent
+loesche die Kategorie {CategoryName}
+
+AddCategoryIntent
+erstelle die Kategorie {CategoryName}
+fuege die Kategorie {CategoryName} hinzu
+
+CategoryStatusInfoIntent
+Wie ist der Status für Kategorie {Category}
+Wie ist der Status für {Category}
+
+CategoryLimitInfoIntent
+Wie ist das Limit für {Category}
+Wie ist das Limit für Kategorie {Category}
+
+CategoryLimitSetIntent
+Ändere Limit für {Category} auf {CategoryLimit} Euro
+Ändere Limit für Kategorie {Category} auf {CategoryLimit} Euro
+Setze Limit für {Category} auf {CategoryLimit} Euro
+Setze Limit für Kategorie {Category} auf {CategoryLimit} Euro
+
+CategorySpendingIntent
+Speichere {Amount} Euro
+Speichere {Amount} Euro für Kategorie {Category}
+Speichere {Amount} Euro für {Category}
+Ich habe {Amount} Euro für {Category} ausgegeben
+
+****************************cards*********************************************
+ReplacementCardReasonIntent
+Die Karte ist {ReplacementReason}
+Die alte Karte wurde {ReplacementReason}
+Die alte Karte ist {ReplacementReason}
+Meine Karte wurde {ReplacementReason}
+Meine Karte ist {ReplacementReason}
+Meine alte Karte wurde {ReplacementReason}
+Meine alte Karte ist {ReplacementReason}
+{ReplacementReason}
+
+ReplacementCardIntent
+Bestelle eine Ersatzkarte
+Ich brauche eine Ersatzkarte
+
+BlockCardIntent
+Sperre Karte {BankCardNumber}
+
+****************************contacts******************************************
+ContactListInfoIntent
+Was sind meine Kontakte
+Kontaktliste
+
+ContactAddIntent
+Speichere Details von Transaktion {TransactionNumber} als Kontakt
+
+ContactDeleteIntent
+Lösche Kontakt Nummer {ContactID}
+Lösche Kontakt {ContactID}
+
+****************************financing*****************************************
+ProductRequestIntent
+Ich brauche ein {ProductKeyword}
+Ich wollte ein {ProductKeyword} kaufen
+
+AffordProduct
+Ich suche {ProductKeyword}
+Was kostet ein {ProductKeyword}
+Was kostet eine {ProductKeyword}
+Was kostet das {ProductKeyword}
+Was kostet die {ProductKeyword}
+Was kostet der {ProductKeyword}
+Sag mir den Preis von {ProductKeyword}
+Sag mir den Preis vom {ProductKeyword}
+Wie viel kostet ein {ProductKeyword}
+Wie viel kostet eine {ProductKeyword}
+Wie viel kostet das {ProductKeyword}
+Wie viel kostet der {ProductKeyword}
+Wie viel kostet die {ProductKeyword}
+produkt {ProductSelection}
+
+PeriodicTransactionListIntent
+Wie sind meine periodischen Transaktionen
+Liste mir meine periodischen Transaktionen auf
+Periodische Transaktionen
+
+PeriodicTransactionAddIntent
+Markiere Transaktion {TransactionNumber} als periodisch
+Markiere Transaktion Nummer {TransactionNumber} als periodisch
+
+PeriodicTransactionDeleteIntent
+Lösche Kennzeichnung periodisch für Transaktion {TransactionNumber}
+Lösche Markierung periodisch für Transaktion {TransactionNumber}
+
+TransactionForecast
+Welche Transaktionen erwarten mich
+Welche Transaktionen erwarten mich in der zunkunft
+Was sind meine zukünftigen Transaktionen
+Zukünftige Transaktionen
+Welche Transaktionen kommen auf mich zu
+
+AccountBalanceForecast
+sag mir mein Kontostand vorraus
+was wird mein Kontostand am {TargetDate} sein
+wie wird mein Kontostand am {TargetDate} sein
+kontostandvorhersage
+
+SavingsPlanIntroIntent
+Erstelle einen Sparplan
+Berechne mir einen Sparplan
+Berechne mir einen Sparplan mit einem Grundsparbetrag von {Betrag} Euro
+Berechne mir einen Sparplan mit einem monatlichen Einzahlungsbetrag von {Betrag} Euro
+Ich moechte monatlich Geld sparen
+
+SavingsPlanChangeParameterIntent
+{SavingsPlanParameter}
+Ändere den {SavingsPlanParameter}
+Ändere die {SavingsPlanParameter}
+
+SavingsPlanNewIntent
+Neu
+Neu beginnen
+
+****************************securities account********************************
+SecuritiesAccountInformationIntent
+Wie sind meine Aktien
+Wie ist der Stand meiner Aktien
+Nenne mir meine Aktien
+Wie ist mein Depotstatus
+
+****************************transfer templates********************************
+BankTransferIntent
+Überweise {Amount} Euro an {Name}
+
+ListTransferTemplatesIntent
+Überweisungsvorlagen
+
+DeleteTransferTemplatesIntent
+Lösche Vorlage {TemplateID}
+
+EditTransferTemplateIntent
+Ändere Betrag von Vorlage {TemplateID} auf {NewAmount}
+
+****************************help and others*************************************
+IntroductionIntent
+Was kann AMOS
+Was kannst du eigentlich
+Was kann ich fragen
+Hilfe
+
+FunctionGroupOverviewIntent
+Übersicht über Kategorien
+
+FunctionGroupIntent
+Mehr über Kategorie {FunctionGroup}
+
+PlainNumberIntent
+{Number}
+
+PlainEuroIntent
+{Number} Euro
+
+PlainYearsIntent
+{Number} Jahre
+{Number} Jahr
+
+PlainCategoryIntent
+{Category}
+Kategorie {Category}
+
+PlainDate
+Bis zum {TargetDate}
+{TargetDate}
+am {TargetDate}
+
+
+FutureIntent
+Spring in die Zukunft
+
+PastIntent
+Spring in die Vergangenheit

@@ -1,0 +1,3 @@
+package amosalexa;
+
+interface AmosAlexaSimpleTest {}
