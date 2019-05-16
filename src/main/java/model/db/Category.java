@@ -1,17 +1,12 @@
 package model.db;
 
-import amosalexa.AmosAlexaSpeechlet;
-import amosalexa.services.budgettracker.BudgetManager;
-import api.aws.DynamoDbClient;
+import amosalexa.handlers.budgettracker.BudgetManager;
 import api.aws.DynamoDbMapper;
-import api.aws.DynamoDbStorable;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static amosalexa.handlers.AmosStreamHandler.USER_ID;
 
 /**
  * Represents a category for the budget tracker feature.
@@ -29,10 +24,11 @@ public class Category {
 
     private String accountNumber;
 
-    public Category() {}
+    public Category() {
+    }
 
     public Category(String name) {
-        this.accountNumber = AmosAlexaSpeechlet.USER_ID;
+        this.accountNumber = USER_ID;
         this.name = name;
     }
 
@@ -94,10 +90,10 @@ public class Category {
     }
 
     @DynamoDBIgnore
-    public static String categoryListText(){
+    public static String categoryListText() {
         StringBuilder categoryNames = new StringBuilder();
         List<Category> categories = DynamoDbMapper.getInstance().loadAll(Category.class); //DynamoDbClient.instance.getItems(Category.TABLE_NAME, Category::new);
-        for(int i = 0; i < categories.size() - 1; i++){
+        for (int i = 0; i < categories.size() - 1; i++) {
             categoryNames.append(categories.get(i).getName()).append(", ");
         }
         categoryNames.append("oder ").append(categories.get(categories.size() - 1).getName());

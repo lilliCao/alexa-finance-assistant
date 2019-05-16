@@ -4,29 +4,13 @@
       "invocationName": "amos",
       "intents": [
         {
-          "name": "AMAZON.ResumeIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.PauseIntent",
-          "samples": []
-        },
-        {
-          "name": "ProductRequestIntent",
+          "name": "SecuritiesAccountInformationIntent",
           "slots": [
             {
-              "name": "ProductKeyword",
-              "type": "LIST_OF_KEYWORDS"
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER"
             }
           ],
-          "samples": [
-            "Ich brauche ein {ProductKeyword}",
-            "Ich wollte ein {ProductKeyword} kaufen"
-          ]
-        },
-        {
-          "name": "SecuritiesAccountInformationIntent",
-          "slots": [],
           "samples": [
             "Wie sind meine Aktien",
             "Wie ist der Stand meiner Aktien",
@@ -35,22 +19,33 @@
           ]
         },
         {
-          "name": "AccountInformation",
+          "name": "AccountInformationIntent",
           "slots": [
             {
-              "name": "AccountInformationSlots",
-              "type": "LIST_OF_ACCOUNT_INFORMATION"
+              "name": "AccountKeyword",
+              "type": "LIST_OF_ACCOUNT_INFORMATION",
+              "samples": [
+                "wie sind meine {AccountKeyword}",
+                "was sind meine {AccountKeyword}",
+                "wie ist mein {AccountKeyword}",
+                "wie ist meine {AccountKeyword}"
+              ]
+            },
+            {
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER"
             }
           ],
           "samples": [
-            "Wie ist mein {AccountInformationSlots}",
-            "Wie ist meine {AccountInformationSlots}",
-            "Was ist mein {AccountInformationSlots}",
-            "Was ist meine {AccountInformationSlots}",
-            "Wie hoch ist mein {AccountInformationSlots}",
-            "Wie hoch ist meine {AccountInformationSlots}",
-            "Was sind meine {AccountInformationSlots}",
-            "Was sind mein {AccountInformationSlots}"
+            "Wie sind meine {AccountKeyword}",
+            "Wie ist mein {AccountKeyword}",
+            "Wie ist meine {AccountKeyword}",
+            "Was ist mein {AccountKeyword}",
+            "Was ist meine {AccountKeyword}",
+            "Wie hoch ist mein {AccountKeyword}",
+            "Wie hoch ist meine {AccountKeyword}",
+            "Was sind meine {AccountKeyword}",
+            "Was sind mein {AccountKeyword}"
           ]
         },
         {
@@ -120,14 +115,6 @@
           ]
         },
         {
-          "name": "AMAZON.YesIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.NoIntent",
-          "samples": []
-        },
-        {
           "name": "AMAZON.HelpIntent",
           "samples": []
         },
@@ -161,78 +148,42 @@
           ]
         },
         {
-          "name": "PlainNumberIntent",
-          "slots": [
-            {
-              "name": "Number",
-              "type": "AMAZON.NUMBER"
-            }
-          ],
-          "samples": [
-            "{Number}"
-          ]
-        },
-        {
-          "name": "PlainEuroIntent",
-          "slots": [
-            {
-              "name": "Number",
-              "type": "AMAZON.NUMBER"
-            }
-          ],
-          "samples": [
-            "{Number} Euro"
-          ]
-        },
-        {
-          "name": "PlainYearsIntent",
-          "slots": [
-            {
-              "name": "Number",
-              "type": "AMAZON.NUMBER"
-            }
-          ],
-          "samples": [
-            "{Number} Jahre",
-            "{Number} Jahr"
-          ]
-        },
-        {
           "name": "SavingsPlanIntroIntent",
           "slots": [
             {
-              "name": "Betrag",
-              "type": "AMAZON.NUMBER"
+              "name": "BasicAmount",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{BasicAmount} Euro",
+                "{BasicAmount}"
+              ]
+            },
+            {
+              "name": "MonthlyPayment",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{MonthlyPayment} Euro",
+                "{MonthlyPayment}"
+              ]
+            },
+            {
+              "name": "Duration",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{Duration} Jahre",
+                "{Duration} Jahr",
+                "{Duration}"
+              ]
             }
           ],
           "samples": [
+            "Neuen Sparplan",
+            "Erstellen einen neuen Sparplan",
             "Erstelle einen Sparplan",
             "Berechne mir einen Sparplan",
-            "Berechne mir einen Sparplan mit einem Grundsparbetrag von {Betrag} Euro",
-            "Berechne mir einen Sparplan mit einem monatlichen Einzahlungsbetrag von {Betrag} Euro",
+            "Berechne mir einen Sparplan mit einem Grundsparbetrag von {BasicAmount} Euro",
+            "Berechne mir einen Sparplan mit einem monatlichen Einzahlungsbetrag von {BasicAmount} Euro",
             "Ich moechte monatlich Geld sparen"
-          ]
-        },
-        {
-          "name": "SavingsPlanChangeParameterIntent",
-          "slots": [
-            {
-              "name": "SavingsPlanParameter",
-              "type": "LIST_OF_SAVINGS_PLAN_PARAMETER"
-            }
-          ],
-          "samples": [
-            "{SavingsPlanParameter}",
-            "Ändere den {SavingsPlanParameter}",
-            "Ändere die {SavingsPlanParameter}"
-          ]
-        },
-        {
-          "name": "SavingsPlanNewIntent",
-          "slots": [],
-          "samples": [
-            "Neu",
-            "Neu beginnen"
           ]
         },
         {
@@ -240,7 +191,10 @@
           "slots": [
             {
               "name": "Number",
-              "type": "AMAZON.NUMBER"
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{Number}"
+              ]
             }
           ],
           "samples": [
@@ -252,20 +206,24 @@
           "slots": [
             {
               "name": "Payee",
-              "type": "AMAZON.DE_FIRST_NAME"
-            },
-            {
-              "name": "PayeeSecondName",
-              "type": "PAYEE_SECOND_NAME"
+              "type": "AMAZON.DE_FIRST_NAME",
+              "samples": [
+                "An {Payee}",
+                "{Payee}"
+              ]
             },
             {
               "name": "orderAmount",
-              "type": "AMAZON.NUMBER"
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{orderAmount} Euro",
+                "{orderAmount}"
+              ]
             }
           ],
           "samples": [
-            "Richte einen neuen Dauerauftrag für {Payee} {PayeeSecondName} in Höhe von {orderAmount} Euro ein",
-            "Richte Dauerauftrag für {Payee} {PayeeSecondName} über von {orderAmount} Euro ein",
+            "Richte einen neuen Dauerauftrag für {Payee}  in Höhe von {orderAmount} Euro ein",
+            "Richte Dauerauftrag für {Payee}  über  {orderAmount} Euro ein",
             "Richte einen neuen Dauerauftrag ein",
             "Richte einen neuen",
             "Richte einfach einen neuen Dauerauftrag ein"
@@ -281,6 +239,10 @@
             {
               "name": "Payee",
               "type": "AMAZON.DE_FIRST_NAME"
+            },
+            {
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER"
             }
           ],
           "samples": [
@@ -298,7 +260,10 @@
           "slots": [
             {
               "name": "Number",
-              "type": "AMAZON.NUMBER"
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{Number}"
+              ]
             },
             {
               "name": "Amount",
@@ -328,6 +293,10 @@
             {
               "name": "TransactionKeyword",
               "type": "LIST_OF_TRANSACTION_KEYWORDS"
+            },
+            {
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER"
             }
           ],
           "samples": [
@@ -340,29 +309,28 @@
         },
         {
           "name": "ReplacementCardIntent",
-          "slots": [],
-          "samples": [
-            "Bestelle eine Ersatzkarte",
-            "Ich brauche eine Ersatzkarte"
-          ]
-        },
-        {
-          "name": "ReplacementCardReasonIntent",
           "slots": [
             {
               "name": "ReplacementReason",
-              "type": "LIST_OF_REPLACEMENT_REASONS"
+              "type": "LIST_OF_REPLACEMENT_REASONS",
+              "samples": [
+                "Meine Karte wurde {ReplacementReason}",
+                "Meine karte ist {ReplacementReason}",
+                "{ReplacementReason}"
+              ]
+            },
+            {
+              "name": "CardEndZiffer",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{CardEndZiffer}"
+              ]
             }
           ],
           "samples": [
-            "Die Karte ist {ReplacementReason}",
-            "Die alte Karte wurde {ReplacementReason}",
-            "Die alte Karte ist {ReplacementReason}",
-            "Meine Karte wurde {ReplacementReason}",
-            "Meine Karte ist {ReplacementReason}",
-            "Meine alte Karte wurde {ReplacementReason}",
-            "Meine alte Karte ist {ReplacementReason}",
-            "{ReplacementReason}"
+            "Bestelle eine Ersatzkarte für die Karte {CardEndZiffer}",
+            "Bestelle eine Ersatzkarte",
+            "Ich brauche eine Ersatzkarte"
           ]
         },
         {
@@ -370,7 +338,10 @@
           "slots": [
             {
               "name": "BankCardNumber",
-              "type": "AMAZON.NUMBER"
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{BankCardNumber}"
+              ]
             }
           ],
           "samples": [
@@ -398,7 +369,10 @@
           "slots": [
             {
               "name": "BalanceLimitAmount",
-              "type": "AMAZON.NUMBER"
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{BalanceLimitAmount}"
+              ]
             }
           ],
           "samples": [
@@ -421,7 +395,12 @@
         },
         {
           "name": "ListTransferTemplatesIntent",
-          "slots": [],
+          "slots": [
+            {
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
           "samples": [
             "Überweisungsvorlagen"
           ]
@@ -443,11 +422,19 @@
           "slots": [
             {
               "name": "TemplateID",
-              "type": "AMAZON.NUMBER"
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{TemplateID}",
+                "Nummer {TemplateID}"
+              ]
             },
             {
               "name": "NewAmount",
-              "type": "AMAZON.NUMBER"
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{NewAmount} Euro",
+                "{NewAmount}"
+              ]
             }
           ],
           "samples": [
@@ -456,7 +443,12 @@
         },
         {
           "name": "ContactListInfoIntent",
-          "slots": [],
+          "slots": [
+            {
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
           "samples": [
             "Was sind meine Kontakte",
             "Kontaktliste"
@@ -496,7 +488,7 @@
             },
             {
               "name": "ProductSelection",
-              "type": "LIST_OF_SELECTABLE_PRODUCTS"
+              "type": "AMAZON.NUMBER"
             }
           ],
           "samples": [
@@ -560,11 +552,18 @@
           "slots": [
             {
               "name": "Category",
-              "type": "LIST_OF_CATEGORIES"
+              "type": "LIST_OF_CATEGORIES",
+              "samples": [
+                "{Category}"
+              ]
             },
             {
               "name": "CategoryLimit",
-              "type": "AMAZON.NUMBER"
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{CategoryLimit} Euro",
+                "{CategoryLimit}"
+              ]
             }
           ],
           "samples": [
@@ -579,11 +578,19 @@
           "slots": [
             {
               "name": "Category",
-              "type": "LIST_OF_CATEGORIES"
+              "type": "LIST_OF_CATEGORIES",
+              "samples": [
+                "Kategorie {Category}",
+                "{Category}"
+              ]
             },
             {
               "name": "Amount",
-              "type": "AMAZON.NUMBER"
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "{Amount} Euro",
+                "{Amount}"
+              ]
             }
           ],
           "samples": [
@@ -611,16 +618,16 @@
           "name": "ContactTransferIntent",
           "slots": [
             {
-              "name": "Amount",
+              "name": "AmountEuro",
               "type": "AMAZON.NUMBER"
             },
             {
               "name": "Contact",
-              "type": "LIST_OF_EXAMPLE_CONTACTS"
+              "type": "LIST_OF_EXAMPLE_CONTACT"
             }
           ],
           "samples": [
-            "Überweise {Amount} Euro an {Contact}"
+            "Überweise {AmountEuro} Euro an {Contact}"
           ]
         },
         {
@@ -648,7 +655,11 @@
           "slots": [
             {
               "name": "CategoryName",
-              "type": "LIST_OF_CATEGORIES"
+              "type": "LIST_OF_CATEGORIES",
+              "samples": [
+                "Kategorie {CategoryName}",
+                "{CategoryName}"
+              ]
             }
           ],
           "samples": [
@@ -660,7 +671,11 @@
           "slots": [
             {
               "name": "CategoryName",
-              "type": "LIST_OF_CATEGORIES"
+              "type": "LIST_OF_CATEGORIES",
+              "samples": [
+                "Kategorie {CategoryName}",
+                "{CategoryName}"
+              ]
             }
           ],
           "samples": [
@@ -670,7 +685,12 @@
         },
         {
           "name": "PeriodicTransactionListIntent",
-          "slots": [],
+          "slots": [
+            {
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
           "samples": [
             "Wie sind meine periodischen Transaktionen",
             "Liste mir meine periodischen Transaktionen auf",
@@ -705,7 +725,21 @@
         },
         {
           "name": "TransactionForecast",
-          "slots": [],
+          "slots": [
+            {
+              "name": "TargetDate",
+              "type": "AMAZON.DATE",
+              "samples": [
+                "Bis zum {TargetDate}",
+                "Bis {TargetDate}",
+                "{TargetDate}"
+              ]
+            },
+            {
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
           "samples": [
             "Welche Transaktionen erwarten mich in der zunkunft",
             "Was sind meine zukünftigen Transaktionen",
@@ -718,7 +752,11 @@
           "slots": [
             {
               "name": "TargetDate",
-              "type": "AMAZON.DATE"
+              "type": "AMAZON.DATE",
+              "samples": [
+                "Am {TargetDate}",
+                "{TargetDate}"
+              ]
             }
           ],
           "samples": [
@@ -726,34 +764,6 @@
             "was wird mein Kontostand am {TargetDate} sein",
             "wie wird mein Kontostand am {TargetDate} sein",
             "kontostandvorhersage"
-          ]
-        },
-        {
-          "name": "PlainDate",
-          "slots": [
-            {
-              "name": "TargetDate",
-              "type": "AMAZON.DATE"
-            }
-          ],
-          "samples": [
-            "Bis zum {TargetDate}",
-            "{TargetDate}",
-            "am {TargetDate}"
-          ]
-        },
-        {
-          "name": "FutureIntent",
-          "slots": [],
-          "samples": [
-            "Spring in die Zukunft"
-          ]
-        },
-        {
-          "name": "PastIntent",
-          "slots": [],
-          "samples": [
-            "Spring in die Vergangenheit"
           ]
         },
         {
@@ -897,17 +907,12 @@
             },
             {
               "name": {
-                "value": "Transaktionen"
-              }
-            },
-            {
-              "name": {
-                "value": "Umsätze"
-              }
-            },
-            {
-              "name": {
-                "value": "Überweisungen"
+                "value": "Transaktionen",
+                "synonyms": [
+                  "Überweisung",
+                  "Transaktion",
+                  "Überweisungen"
+                ]
               }
             }
           ]
@@ -997,77 +1002,27 @@
           "values": [
             {
               "name": {
-                "value": "Auto"
+                "value": "auto"
               }
             },
             {
               "name": {
-                "value": "Haushalt"
+                "value": "haushalt"
               }
             },
             {
               "name": {
-                "value": "Freizeit"
+                "value": "freizeit"
               }
             },
             {
               "name": {
-                "value": "Reisen"
+                "value": "reisen"
               }
             },
             {
               "name": {
-                "value": "Sonstiges"
-              }
-            }
-          ]
-        },
-        {
-          "name": "LIST_OF_SAVINGS_PLAN_PARAMETER",
-          "values": [
-            {
-              "name": {
-                "value": "Grundbetrag"
-              }
-            },
-            {
-              "name": {
-                "value": "Laufzeit"
-              }
-            },
-            {
-              "name": {
-                "value": "Monatliche Einzahlung"
-              }
-            }
-          ]
-        },
-        {
-          "name": "PAYEE_SECOND_NAME",
-          "values": [
-            {
-              "name": {
-                "value": "Mustermann"
-              }
-            },
-            {
-              "name": {
-                "value": "Kaufmann"
-              }
-            },
-            {
-              "name": {
-                "value": "Müller"
-              }
-            },
-            {
-              "name": {
-                "value": "Miller"
-              }
-            },
-            {
-              "name": {
-                "value": "Bachman"
+                "value": "sonstiges"
               }
             }
           ]
@@ -1168,27 +1123,7 @@
           ]
         },
         {
-          "name": "LIST_OF_SELECTABLE_PRODUCTS",
-          "values": [
-            {
-              "name": {
-                "value": "a"
-              }
-            },
-            {
-              "name": {
-                "value": "b"
-              }
-            },
-            {
-              "name": {
-                "value": "c"
-              }
-            }
-          ]
-        },
-        {
-          "name": "LIST_OF_EXAMPLE_CONTACTS",
+          "name": "LIST_OF_EXAMPLE_CONTACT",
           "values": [
             {
               "name": {
@@ -1213,6 +1148,843 @@
           ]
         }
       ]
-    }
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "SetBalanceLimitIntent",
+          "delegationStrategy": "ALWAYS",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.54778452213"
+          },
+          "slots": [
+            {
+              "name": "BalanceLimitAmount",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.54778452213.1384984263081"
+              }
+            }
+          ]
+        },
+        {
+          "name": "AccountInformationIntent",
+          "delegationStrategy": "ALWAYS",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "AccountKeyword",
+              "type": "LIST_OF_ACCOUNT_INFORMATION",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.134764547661.375794002950"
+              }
+            },
+            {
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "ContactTransferIntent",
+          "delegationStrategy": "ALWAYS",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "AmountEuro",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            },
+            {
+              "name": "Contact",
+              "type": "LIST_OF_EXAMPLE_CONTACT",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "StandingOrdersDeleteIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.589067293833"
+          },
+          "slots": [
+            {
+              "name": "Number",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.589067293833.998464777203"
+              }
+            }
+          ]
+        },
+        {
+          "name": "StandingOrdersModifyIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.51203397785"
+          },
+          "slots": [
+            {
+              "name": "Number",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.51203397785.818505581897"
+              }
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            },
+            {
+              "name": "ExecutionRate",
+              "type": "LIST_OF_EXECUTION_RATES",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            },
+            {
+              "name": "FirstExecution",
+              "type": "AMAZON.DATE",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "StandingOrderSmartIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "Payee",
+              "type": "AMAZON.DE_FIRST_NAME",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.845458815267.701558934898"
+              }
+            },
+            {
+              "name": "orderAmount",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.845458815267.782655832150"
+              }
+            }
+          ]
+        },
+        {
+          "name": "CategoryLimitSetIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.1465059892820"
+          },
+          "slots": [
+            {
+              "name": "Category",
+              "type": "LIST_OF_CATEGORIES",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1465059892820.993070108920"
+              }
+            },
+            {
+              "name": "CategoryLimit",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1465059892820.865668036227"
+              }
+            }
+          ]
+        },
+        {
+          "name": "CategorySpendingIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.1484311965202"
+          },
+          "slots": [
+            {
+              "name": "Category",
+              "type": "LIST_OF_CATEGORIES",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1484311965202.1536765390103"
+              }
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1484311965202.341345684826"
+              }
+            }
+          ]
+        },
+        {
+          "name": "AddCategoryIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.761513830526"
+          },
+          "slots": [
+            {
+              "name": "CategoryName",
+              "type": "LIST_OF_CATEGORIES",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.761513830526.367593434565"
+              }
+            }
+          ]
+        },
+        {
+          "name": "DeleteCategoryIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "CategoryName",
+              "type": "LIST_OF_CATEGORIES",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1155346982925.984365106929"
+              }
+            }
+          ]
+        },
+        {
+          "name": "BlockCardIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.181358574393"
+          },
+          "slots": [
+            {
+              "name": "BankCardNumber",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.181358574393.41613245247"
+              }
+            }
+          ]
+        },
+        {
+          "name": "ReplacementCardIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.1502908017257"
+          },
+          "slots": [
+            {
+              "name": "ReplacementReason",
+              "type": "LIST_OF_REPLACEMENT_REASONS",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1502908017257.737889464319"
+              }
+            },
+            {
+              "name": "CardEndZiffer",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1502908017257.59918348489"
+              }
+            }
+          ]
+        },
+        {
+          "name": "ContactDeleteIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.993701862"
+          },
+          "slots": [
+            {
+              "name": "ContactID",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "DeleteTransferTemplatesIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.451330781932"
+          },
+          "slots": [
+            {
+              "name": "TemplateID",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "EditTransferTemplateIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.666154280058"
+          },
+          "slots": [
+            {
+              "name": "TemplateID",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.666154280058.461378208058"
+              }
+            },
+            {
+              "name": "NewAmount",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.666154280058.1203678786264"
+              }
+            }
+          ]
+        },
+        {
+          "name": "AccountBalanceForecast",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "TargetDate",
+              "type": "AMAZON.DATE",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1399307604079.891027437775"
+              }
+            }
+          ]
+        },
+        {
+          "name": "TransactionForecast",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "TargetDate",
+              "type": "AMAZON.DATE",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.406949523536.75296617799"
+              }
+            },
+            {
+              "name": "NextIndex",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "PeriodicTransactionDeleteIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.397049010424"
+          },
+          "slots": [
+            {
+              "name": "TransactionNumber",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "PeriodicTransactionAddIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.459739353814"
+          },
+          "slots": [
+            {
+              "name": "TransactionNumber",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "SavingsPlanIntroIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "BasicAmount",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": true,
+              "elicitationRequired": true,
+              "prompts": {
+                "confirmation": "Confirm.Slot.612471909771.683827361627",
+                "elicitation": "Elicit.Slot.612471909771.683827361627"
+              }
+            },
+            {
+              "name": "MonthlyPayment",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": true,
+              "elicitationRequired": true,
+              "prompts": {
+                "confirmation": "Confirm.Slot.612471909771.1209248519037",
+                "elicitation": "Elicit.Slot.612471909771.1209248519037"
+              }
+            },
+            {
+              "name": "Duration",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": true,
+              "elicitationRequired": true,
+              "prompts": {
+                "confirmation": "Confirm.Slot.612471909771.1365620407904",
+                "elicitation": "Elicit.Slot.612471909771.1365620407904"
+              }
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "prompts": [
+      {
+        "id": "Elicit.Slot.54778452213.1384984263081",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Ich verstehe den angegebenen Betrag nicht. Auf welchen Betrag möchtest du dein Kontolimit setzen?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Auf welchen Betrag möchtest du dein Kontolimit setzen?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.54778452213",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Möchtest du dein Limit wirklich auf  {BalanceLimitAmount}  Euro setzen?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Soll ich dein Kontolimit wirklich auf {BalanceLimitAmount} Euro setzen?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Möchtest du dein Kontolimit wirklich auf  {BalanceLimitAmount}  Euro setzen?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.134764547661.375794002950",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Frage mich etwas über Kontonummer, IBAN, Kartelimit, Transaktionen"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.589067293833.998464777203",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Ich bin mir nicht sicher. Bitte wiederhole die Nummer"
+          },
+          {
+            "type": "PlainText",
+            "value": "Welche Nummer?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.589067293833",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Moechtest du den Dauerauftrag mit der Nummer {Number} wirklich löschen?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.51203397785",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Soll ich den Ausführungsrhythmus von Dauerauftrag Nummer {Number} auf {ExecutionRate} beginnend am {FirstExecution} ändern?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Soll ich den Dauerauftrag Nummer {Number} auf {Amount} Euro ändern?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.51203397785.818505581897",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Welche Auftragnummer?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.845458815267.701558934898",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "An wem?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.845458815267.782655832150",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Wie viel?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1465059892820.993070108920",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Das habe ich nicht ganz verstanden, bitte wiederhole die Kategorie"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1465059892820.865668036227",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Wie viel soll ich setzen?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.1465059892820",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Moechtest du das Ausgabelimit fuer die Kategorie {Category} wirklich auf {CategoryLimit}  setzen?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1484311965202.1536765390103",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Ich bin mir nicht sicher. Welche Kategorie?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1484311965202.341345684826",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Wie viel soll ich setzen?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.1484311965202",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Soll ich {Amount} Euro für Kategorie {Category} speichern?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.761513830526.367593434565",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Bitte wiederhole die Kategorie"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.761513830526",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Möchtest du wirklich die Kategorie {CategoryName} erstellen?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1155346982925.984365106929",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Welche Kategorie willst du löschen?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.181358574393.41613245247",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Wie lautet die Kartenummer?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.181358574393",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Möchtest du die Karte {BankCardNumber} wirklich sperren?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.928790615713",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Deine Karte mit den Endziffer {CardEndZiffer} wurde {ReplacementReason} . Ich soll neue Karte bestellen. Ist das richtig?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1502908017257.737889464319",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Ist deine alte Karte beschädigt oder gesperrt?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1502908017257.59918348489",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Bitte nenne mir die letzte vier Ziffer von deiner Karte"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.1502908017257",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Soll ein Ersatz für die {ReplacementReason} Karte mit den Endziffern {CardEndZiffer} bestellt werden?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.993701862",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Soll ich wirklich Kontak Nummer {ContactID} löschen?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.451330781932",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Möchtest du den Vorlage Nummer {TemplateID} wirklich löschen?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.666154280058",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Möchtest du den Vorlage {TemplateID} auf {NewAmount} wirklich ändern?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.666154280058.461378208058",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Bitte wiederhole die Vorlage Nummer"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.666154280058.1203678786264",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Wie viel soll ich jetzt setzen?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1399307604079.891027437775",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Ich konnte den Zeitpunkt nicht verstehen. Sag ein Datum an dem du dein Kontostand erfahren willst"
+          },
+          {
+            "type": "PlainText",
+            "value": "Sag mir bitte, zu welchem Zeitpunkt möchtest du dein Kontostand erfahren"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.406949523536.75296617799",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Sag mir bitte, bis wann möchtest du deine zukünftigen Transaktionen hören?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Ich konnte den Zeitpunkt nicht verstehen. Sag ein Datum bis wann du zukünftige Transaktionen hören willst"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.397049010424",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Moechtest du die Markierung als periodisch fuer die Transaktion mit der Nummer {TransactionNumber} wirklich entfernen?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Intent.459739353814",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Möchtest du die Transaktion Nummer {TransactionNumber} wirklich periodisch markieren?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.612471909771.683827361627",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Wie hoch ist dein Grundbetrag?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Was moechtest du als Grundbetrag anlegen?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.612471909771.1209248519037",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Welchen Geldbetrag moechtest du monatlich investieren?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.612471909771.1365620407904",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Wie viele Jahre moechtest du das Geld anlegen?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.612471909771.683827361627",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Ich setze {BasicAmount} Euro als dein Grundbetrag. Ist das richtig?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.612471909771.1209248519037",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Du willst monatlich {MonthlyPayment} Euro sparen. Ist das richtig?"
+          }
+        ]
+      },
+      {
+        "id": "Confirm.Slot.612471909771.1365620407904",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Soll ich den Sparplan für {Duration} Jahre rechnen?"
+          }
+        ]
+      }
+    ]
   }
 }

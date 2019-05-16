@@ -7,27 +7,28 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName = "last_ids")
 public class LastIds {
-	private String tableName;
-	private int id;
+    private String tableName;
+    private int id;
 
-	public LastIds() {}
+    public LastIds() {
+    }
 
-	@DynamoDBAttribute(attributeName = "id")
-	public int getId() {
-		return id;
-	}
+    @DynamoDBAttribute(attributeName = "id")
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	@DynamoDBHashKey(attributeName = "table_name")
-	public String getTableName() {
-		return tableName;
-	}
+    @DynamoDBHashKey(attributeName = "table_name")
+    public String getTableName() {
+        return tableName;
+    }
 
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
 }

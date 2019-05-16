@@ -1,7 +1,6 @@
 package amosalexa.handlers.bankcontact;
 
 
-import amosalexa.services.bankcontact.GeoCoder;
 import com.amazon.ask.model.services.deviceAddress.Address;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
@@ -67,7 +66,7 @@ public class PlaceFinder {
         if (latLng == null) {
             return null;
         }
-        GooglePlaces client = new GooglePlaces(GeoCoder.GOOGLE_MAP_API_KEY);
+        GooglePlaces client = new GooglePlaces(GOOGLE_MAP_API_KEY);
 
         Param extraParams = new Param("keyword");
         StringBuilder stringBuilder = new StringBuilder();

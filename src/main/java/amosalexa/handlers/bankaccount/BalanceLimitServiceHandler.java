@@ -1,7 +1,6 @@
 package amosalexa.handlers.bankaccount;
 
-import amosalexa.Service;
-import amosalexa.services.help.HelpService;
+import amosalexa.handlers.Service;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
 import com.amazon.ask.model.Intent;
@@ -19,7 +18,7 @@ import static amosalexa.handlers.ResponseHelper.response;
 
 @Service(
         functionName = "Kontolimit verwalten",
-        functionGroup = HelpService.FunctionGroup.BUDGET_TRACKING,
+        functionGroup = Service.FunctionGroup.BUDGET_TRACKING,
         example = "Setze mein Kontolimit auf 800 Euro",
         description = "Diese Funktion erlaubt es dir ein Kontolimit zu setzen, sodass du nicht aus Versehen zu viel Geld ausgibst."
 )

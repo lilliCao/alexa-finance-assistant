@@ -1,6 +1,6 @@
 package model.banking;
 
-import amosalexa.services.DialogUtil;
+import amosalexa.handlers.utils.DialogUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class Account {
     private String creditLimitText;
 
     private String number;
-    private final static String  numberSlot = "kontonummer";
+    private final static String numberSlot = "kontonummer";
     private String numberText;
 
     private Number interestRate;
@@ -42,17 +42,17 @@ public class Account {
 
     private Map<String, String> speechTexts;
 
-    public void setSpeechTexts(){
+    public void setSpeechTexts() {
         creditcardLimitText = "Dein " + creditcardLimitSlot + " beträgt <say-as interpret-as=\"unit\">€" + creditcardLimit + "</say-as>";
         balanceText = "Dein " + balanceSlot + " beträgt <say-as interpret-as=\"unit\">€" + balance + "</say-as>";
         openingDateText = "Dein " + openingDateSlot + " war " + openingDate;
         creditLimitText = "Dein " + creditLimitSlot + " beträgt <say-as interpret-as=\"unit\">€" + creditcardLimit + "</say-as>";
-        numberText = "Deine " + numberSlot + " lautet " + number;
+        numberText = "Deine " + DialogUtil.readNumberAsDigit(numberSlot) + " lautet " + number;
         interestRateText = "Dein " + interestRateSlot + " ist aktuell " + interestRate;
         withdrawalFeeText = "Deine " + withdrawalFeeSlot + " beträgt <say-as interpret-as=\"unit\">€" + withdrawalFee + "</say-as>";
         ibanText = "Deine " + ibanSlot + " lautet " + DialogUtil.getIbanSsmlOutput(iban);
 
-        speechTexts = new HashMap<String, String>(){{
+        speechTexts = new HashMap<String, String>() {{
             put(creditcardLimitSlot, creditcardLimitText);
             put(balanceSlot, balanceText);
             put(openingDateSlot, openingDateText);
@@ -65,90 +65,73 @@ public class Account {
 
     }
 
-    public Number getCreditcardLimit ()
-    {
+    public Number getCreditcardLimit() {
         return creditcardLimit;
     }
 
-    public void setCreditcardLimit (double creditcardLimit)
-    {
+    public void setCreditcardLimit(double creditcardLimit) {
         this.creditcardLimit = creditcardLimit;
     }
 
-    public Number getBalance ()
-    {
+    public Number getBalance() {
         return balance;
     }
 
-    public void setBalance (Number balance)
-    {
+    public void setBalance(Number balance) {
         this.balance = balance;
     }
 
-    public String getOpeningDate ()
-    {
+    public String getOpeningDate() {
         return openingDate;
     }
 
-    public void setOpeningDate (String openingDate)
-    {
+    public void setOpeningDate(String openingDate) {
         this.openingDate = openingDate;
     }
 
-    public Number getCreditLimit ()
-    {
+    public Number getCreditLimit() {
         return creditLimit;
     }
 
-    public void setCreditLimit (double creditLimit)
-    {
+    public void setCreditLimit(double creditLimit) {
         this.creditLimit = creditLimit;
     }
 
-    public String getNumber ()
-    {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber (String number)
-    {
+    public void setNumber(String number) {
         this.number = number;
     }
 
-    public Number getInterestRate ()
-    {
+    public Number getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate (double interestRate)
-    {
+    public void setInterestRate(double interestRate) {
         this.interestRate = interestRate;
     }
 
-    public Number getWithdrawalFee ()
-    {
+    public Number getWithdrawalFee() {
         return withdrawalFee;
     }
 
-    public void setWithdrawalFee (double withdrawalFee)
-    {
+    public void setWithdrawalFee(double withdrawalFee) {
         this.withdrawalFee = withdrawalFee;
     }
 
-    public String getIban ()
-    {
+    public String getIban() {
         return iban;
     }
 
-    public void setIban (String iban)
-    {
+    public void setIban(String iban) {
         this.iban = iban;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [creditcardLimit = "+creditcardLimit+", balance = "+balance+", openingDate = "+openingDate+", creditLimit = "+creditLimit+", number = "+number+", interestRate = "+interestRate+", withdrawalFee = "+withdrawalFee+", iban = "+iban+"]";
+    public String toString() {
+        return "ClassPojo [creditcardLimit = " + creditcardLimit + ", balance = " + balance + ", openingDate = " + openingDate + ", creditLimit = " + creditLimit + ", number = " + number + ", interestRate = " + interestRate + ", withdrawalFee = " + withdrawalFee + ", iban = " + iban + "]";
     }
 
     public static String getCreditcardLimitSlot() {

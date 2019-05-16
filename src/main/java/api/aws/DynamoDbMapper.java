@@ -29,8 +29,8 @@ public class DynamoDbMapper {
         this.dynamoDB = new DynamoDB(dynamoDbClient);
     }
 
-    public static DynamoDbMapper getInstance(){
-        synchronized (DynamoDbMapper.class){
+    public static DynamoDbMapper getInstance() {
+        synchronized (DynamoDbMapper.class) {
             return dynamoDbMapper;
         }
     }
@@ -58,7 +58,7 @@ public class DynamoDbMapper {
         try {
             dynamoDbClient.deleteTable(tableRequest);
             table.waitForDelete();
-        } catch(ResourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             // Table does not exist
         } catch (InterruptedException e) {
             e.printStackTrace();

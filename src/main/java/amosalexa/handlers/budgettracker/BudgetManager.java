@@ -1,7 +1,5 @@
 package amosalexa.handlers.budgettracker;
 
-
-import amosalexa.AmosAlexaSpeechlet;
 import api.aws.DynamoDbClient;
 import api.aws.DynamoDbMapper;
 import api.banking.TransactionAPI;
@@ -12,6 +10,8 @@ import org.joda.time.DateTime;
 
 import java.util.Collection;
 import java.util.List;
+
+import static amosalexa.handlers.AmosStreamHandler.ACCOUNT_NUMBER;
 
 /**
  * BudgetManager class. Offers and interface to create spendings and retrieve the total spendings amount (including transactions) for a given category.
@@ -72,7 +72,7 @@ public class BudgetManager {
     private double getTransactionAmount(String categoryId, DateTime start, DateTime end) {
         double sum = 0;
 
-        Collection<Transaction> apiTransactions = TransactionAPI.getTransactionsForAccount(AmosAlexaSpeechlet.ACCOUNT_ID);
+        Collection<Transaction> apiTransactions = TransactionAPI.getTransactionsForAccount(ACCOUNT_NUMBER);
 
         List<TransactionDB> dbTransactions = dynamoDbMapper.loadAll(TransactionDB.class);
 

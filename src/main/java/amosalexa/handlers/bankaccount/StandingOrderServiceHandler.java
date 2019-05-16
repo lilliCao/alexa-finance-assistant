@@ -1,7 +1,6 @@
 package amosalexa.handlers.bankaccount;
 
-import amosalexa.Service;
-import amosalexa.services.help.HelpService;
+import amosalexa.handlers.Service;
 import api.banking.AccountAPI;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
@@ -21,7 +20,7 @@ import static amosalexa.handlers.ResponseHelper.*;
 
 @Service(
         functionName = "Daueraufträge verwalten",
-        functionGroup = HelpService.FunctionGroup.ONLINE_BANKING,
+        functionGroup = Service.FunctionGroup.ONLINE_BANKING,
         example = "Wie lauten meine Daueraufträge?",
         description = "Diese Funktion ermöglicht dir das Verwalten von Daueraufträgen."
 )
@@ -177,7 +176,6 @@ public class StandingOrderServiceHandler implements IntentRequestHandler {
     private Optional<Response> getStandingOrdersKeyword() {
         String standingOrderKeywordSlot = intentRequestReceived.getIntent().getSlots().get(SLOT_STANDINGORDER_KEYWORD).getValue();
         String transactionKeywordSlot = intentRequestReceived.getIntent().getSlots().get(SLOT_TRANSACTION_KEYWORD).getValue();
-        ;
         String keyword = transactionKeywordSlot;
         boolean isStandingOrderKeywordSlot = false;
         if (standingOrderKeywordSlot != null) {
@@ -226,7 +224,7 @@ public class StandingOrderServiceHandler implements IntentRequestHandler {
                 .append(standingOrderCollection.size() == 1 ?
                         "<phoneme alphabet=\"ipa\" ph=\"ˈaɪ̯nəm\">einem</phoneme> gefundenen Dauerauftrag "
                         : standingOrderCollection.size() + " gefundenen Dauerauftraegen ")
-                .append("konnte ich berechnen, dass du monatlich " + String.format("%.2", total) + " Euro ")
+                .append("konnte ich berechnen, dass du monatlich " + String.format("%.2f", total) + " Euro ")
                 .append(isStandingOrderKeywordSlot ? "fuer " + keyword + " bezahlst. " : "für " + keyword + " hast");
         builder.append("Soll ich die gefundenen Dauerauftraege aufzaehlen? ");
         intentRequestReceived.getIntent().getSlots().put(SLOT_NEXT_INDEX, Slot.builder().withValue("0")

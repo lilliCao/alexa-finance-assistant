@@ -16,7 +16,8 @@ public class TransactionDB {
      */
     private boolean periodic;
 
-    public TransactionDB() {}
+    public TransactionDB() {
+    }
 
     public TransactionDB(String transactionId) {
         this.transactionId = transactionId;

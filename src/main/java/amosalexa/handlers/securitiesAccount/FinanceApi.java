@@ -1,7 +1,6 @@
 package amosalexa.handlers.securitiesAccount;
 
-
-import api.BankingRESTClient;
+import api.banking.BankingRESTClient;
 import model.banking.Security;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

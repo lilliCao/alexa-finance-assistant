@@ -1,18 +1,14 @@
 package api;
 
-import amosalexa.AccountFactory;
-import api.aws.DynamoDbMapper;
 import api.banking.AccountAPI;
 import model.banking.Account;
 import model.banking.Card;
 import model.banking.StandingOrder;
-import model.db.AccountDB;
 import org.joda.time.DateTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -52,19 +48,16 @@ public class AccountTest {
 
     @Test
     public void createRandNumber() throws InterruptedException {
-       //DynamoDbMapper.getInstance().createTable(CategoryDB.class);
+        //DynamoDbMapper.getInstance().createTable(CategoryDB.class);
         //DynamoDbMapper.getInstance().save(new CategoryDB("1234", "mytest", 100));
     }
 
 
-
-
-
     /**
      * Account Information
-     *
+     * <p>
      * object path /api/v1_0/accounts/{accountnumber}
-     *
+     * <p>
      * https://s3.eu-central-1.amazonaws.com/amos-bank/api-guide.html#_konto_informationen
      */
 
@@ -98,8 +91,8 @@ public class AccountTest {
 
         boolean foundCard = false;
 
-        for(Card card1 : cards) {
-            if(card1.getCardNumber().equals(newCard.getCardNumber())) {
+        for (Card card1 : cards) {
+            if (card1.getCardNumber().equals(newCard.getCardNumber())) {
                 foundCard = true;
             }
             AccountAPI.deleteCard(ACCOUNT_NUMBER, card1.getCardId());
@@ -127,8 +120,8 @@ public class AccountTest {
 
         boolean foundStandingOrder = false;
 
-        for(StandingOrder standingOrder1 : standingOrders) {
-            if(standingOrder1.getStandingOrderId().equals(standingOrder.getStandingOrderId())) {
+        for (StandingOrder standingOrder1 : standingOrders) {
+            if (standingOrder1.getStandingOrderId().equals(standingOrder.getStandingOrderId())) {
                 foundStandingOrder = true;
                 break;
             }

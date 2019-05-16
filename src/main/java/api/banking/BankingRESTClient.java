@@ -1,15 +1,15 @@
 package api.banking;
 
-import amosalexa.AmosAlexaSpeechlet;
 import configuration.ConfigurationAMOS;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import static amosalexa.AmosAlexaSpeechlet.USER_ID;
-
+import static amosalexa.handlers.AmosStreamHandler.USER_ID;
 
 /**
  * Banking Rest Client
@@ -63,7 +63,7 @@ public class BankingRESTClient {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + AuthenticationAPI.getAccessToken(AmosAlexaSpeechlet.USER_ID));
+        headers.set("Authorization", "Bearer " + AuthenticationAPI.getAccessToken(USER_ID));
         return headers;
     }
 
@@ -103,6 +103,23 @@ public class BankingRESTClient {
     }
 
     /**
+     * POST HTTP request to the banking endpoint.
+     *
+     * @param objectPath object path of the API interface
+     * @param request    post object
+     * @return banking object
+     */
+    public Object postBankingModelObject(String objectPath, Object request) throws RestClientException {
+        String url = BANKING_API_ENDPOINT + BANKING_API_BASEURL_V2 + objectPath;
+        log.info("POST to API: " + objectPath);
+
+        //return restTemplate.postForObject(url, request, cl);
+
+        HttpEntity entity = new HttpEntity(request, generateHttpHeaders());
+        return restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
+    }
+
+    /**
      * PUT HTTP request to the banking endpoint.
      *
      * @param objectPath endpoint object
@@ -131,5 +148,22 @@ public class BankingRESTClient {
 
         HttpEntity entity = new HttpEntity(null, generateHttpHeaders());
         restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
+    }
+
+
+    /**
+     * POST http request to the endpoint given by parameter URL
+     *
+     * @param objectPath endpoint object
+     * @param json       body
+     * @return banking object
+     */
+    public String postAnyObject(String objectPath, String json) {
+        log.info("POST from API: " + objectPath + " Body: " + json);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(json, headers);
+        return restTemplate.postForObject(objectPath, entity, String.class);
     }
 }

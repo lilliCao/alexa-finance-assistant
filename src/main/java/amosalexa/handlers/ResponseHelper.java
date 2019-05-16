@@ -65,4 +65,14 @@ public class ResponseHelper {
                 .build();
     }
 
+    public static Optional<Response> responseElicitDelegate(HandlerInput input, String cardTitle, String text,
+                                                            Intent intent, String slotName) {
+        return input.getResponseBuilder()
+                .withSpeech(text)
+                .withSimpleCard(cardTitle, text)
+                .addElicitSlotDirective(slotName, intent)
+                .withShouldEndSession(false)
+                .build();
+    }
+
 }

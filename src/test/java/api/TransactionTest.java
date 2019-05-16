@@ -1,7 +1,5 @@
 package api;
 
-
-import amosalexa.services.AccountData;
 import api.aws.DynamoDbMapper;
 import api.banking.AccountAPI;
 import api.banking.TransactionAPI;
@@ -9,7 +7,6 @@ import model.banking.Transaction;
 import model.db.TransactionDB;
 import org.joda.time.DateTime;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +23,12 @@ public class TransactionTest {
     private static final Logger log = LoggerFactory.getLogger(TransactionTest.class);
 
     private static final String ACCOUNT_NUMBER1 = "0000000000";
+    private static final String ACCOUNT_NUMBER2 = "1234567890";
 
     private static final String ACCOUNT_IBAN1 = "DE77100000000000000000";
     private static final String ACCOUNT_IBAN2 = "DE50100000000000000001";
     private static final String VALUE_DATE = new DateTime(2017, 5, 1, 12, 0).toLocalDate().toString();
+
 
     @BeforeClass
     public static void setUpAccount() {
@@ -39,6 +38,7 @@ public class TransactionTest {
         String openingDate = formatter.format(time);
 
         AccountAPI.createAccount(ACCOUNT_NUMBER1, 1250000, openingDate);
+        AccountAPI.createAccount(ACCOUNT_NUMBER2, 1250000, openingDate);
     }
 
     @Test
@@ -82,20 +82,20 @@ public class TransactionTest {
         }
     }
 
-    @Ignore
-    public void createPeriodicTransactionTest(){
+    @Test
+    public void createPeriodicTransactionTest() {
 
         DynamoDbMapper dynamoDbMapper = DynamoDbMapper.getInstance();
 
-        String source = AccountAPI.getAccount(AccountData.ACCOUNT_DEFAULT).getIban();
-        String destination = AccountAPI.getAccount(AccountData.ACCOUNT_DEFAULT_2).getIban();
+        String source = AccountAPI.getAccount(ACCOUNT_NUMBER1).getIban();
+        String destination = AccountAPI.getAccount(ACCOUNT_NUMBER2).getIban();
 
         // create sample transactions
         String date = new DateTime(2017, 8, 14, 12, 0).toLocalDate().toString();
         Transaction transaction = TransactionAPI.createTransaction(10, source, destination, date,
                 "Netflix", "Netflix", "Peter Müller");
 
-        TransactionDB tDB1 = new TransactionDB(transaction.getTransactionId().toString(), "", AccountData.ACCOUNT_DEFAULT);
+        TransactionDB tDB1 = new TransactionDB(transaction.getTransactionId().toString(), "", ACCOUNT_NUMBER1);
         tDB1.setPeriodic(true);
         dynamoDbMapper.save(tDB1);
 

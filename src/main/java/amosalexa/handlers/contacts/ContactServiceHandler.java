@@ -1,7 +1,7 @@
 package amosalexa.handlers.contacts;
 
 import amosalexa.handlers.Service;
-import amosalexa.services.DialogUtil;
+import amosalexa.handlers.utils.DialogUtil;
 import api.banking.TransactionAPI;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
@@ -129,13 +129,13 @@ public class ContactServiceHandler implements IntentRequestHandler {
 
         if (nextIndex.getValue() == null) {
             //read contact by limit for the first time
-            StringBuilder builder = new StringBuilder("Du hast ingesamt " + contacts.size() + " Kontakte ");
+            StringBuilder builder = new StringBuilder("Du hast ingesamt " + contacts.size() + " Kontakte. ");
             for (int i = 0; i < CONTACT_LIMIT; i++) {
                 if (i < contacts.size()) {
                     Contact contact = contacts.get(i);
                     builder.append(" Kontakt ").append(contact.getId())
                             .append(" Name ").append(contact.getName())
-                            .append(" IBAN ").append(DialogUtil.getIbanSsmlOutput(contact.getIban()));
+                            .append(" IBAN ").append(DialogUtil.getIbanSsmlOutput(contact.getIban())).append(".");
                 }
             }
             if (contacts.size() > CONTACT_LIMIT) {

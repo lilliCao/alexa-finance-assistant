@@ -2,9 +2,12 @@ package amosalexa.handlers;
 
 import amosalexa.handlers.bankaccount.AccountInformationIntentHandler;
 import amosalexa.handlers.bankaccount.BalanceLimitServiceHandler;
+import amosalexa.handlers.bankaccount.StandingOrderServiceHandler;
 import amosalexa.handlers.budgetreport.BudgetReportServiceHandler;
 import amosalexa.handlers.budgettracker.BudgetTrackerServiceHandler;
 import amosalexa.handlers.financing.AccountBalanceForecastServiceHandler;
+import amosalexa.handlers.financing.AffordabilityServiceHandler;
+import amosalexa.handlers.financing.SavingPlanServiceHandler;
 import amosalexa.handlers.financing.TransactionForecastServiceHandler;
 import com.amazon.ask.model.IntentConfirmationStatus;
 import com.amazon.ask.model.Slot;
@@ -51,7 +54,7 @@ public class AmosHandlerTest {
                         Resolution.builder()
                                 .addValuesItem(ValueWrapper.builder().withValue(Value.builder().withName("Kontostand").build()).build())
                                 .build())
-                                .build())
+                        .build())
                 .build());
         createIntentRequest(ACCOUNT_INFORMATION_INTENT, slots);
         test(handler, "Dein Kontostand beträgt (.*)");
@@ -79,9 +82,23 @@ public class AmosHandlerTest {
     }
 
     @Test
+    public void testStandingOrderSmart() {
+        StandingOrderServiceHandler handler = new StandingOrderServiceHandler();
+        Map<String, Slot> slots = new HashMap<>();
+
+        // contains
+        slots.put("StandingOrderKeyword", Slot.builder().withValue("Miete").build());
+        slots.put("NextIndex", Slot.builder().build());
+        slots.put("TransactionKeyword", Slot.builder().build());
+
+        createIntentRequest("StandingOrdersKeywordIntent", slots);
+        test(handler, "(.*)");
+    }
+
+    @Test
     public void testBudgetReportIntentHandler() {
         createIntentRequest(BUDGET_REPORT_EMAIL_INTENT);
-        test (new BudgetReportServiceHandler(), "Okay, ich habe dir deinen Ausgabenreport per E-Mail gesendet.");
+        test(new BudgetReportServiceHandler(), "Okay, ich habe dir deinen Ausgabenreport per E-Mail gesendet.");
     }
 
     @Test
@@ -113,7 +130,7 @@ public class AmosHandlerTest {
         slots.put(SLOT_CATEGORY, Slot.builder().withValue(categoryName).build());
         slots.put(SLOT_CATEGORY_LIMIT, Slot.builder().withValue(amount).build());
         createIntentRequest(CATEGORY_LIMIT_SET_INTENT, slots, IntentConfirmationStatus.CONFIRMED);
-        test(handler, "Limit für "+categoryName+" wurde auf "+amount+"(.*) gesetzt");
+        test(handler, "Limit für " + categoryName + " wurde auf " + amount + "(.*) gesetzt");
     }
 
     @Test
@@ -178,6 +195,41 @@ public class AmosHandlerTest {
         slots.put("NextIndex", Slot.builder().build());
 
         createIntentRequest("TransactionForecast", slots);
+        test(handler, "(.*)");
+    }
+
+    @Test
+    public void testSavingPlanServiceHandler() {
+        SavingPlanServiceHandler handler = new SavingPlanServiceHandler();
+        Map<String, Slot> slots = new HashMap<>();
+
+        // contains
+        slots.put("BasicAmount", Slot.builder().withValue("200").build());
+        slots.put("Duration", Slot.builder().withValue("3").build());
+        slots.put("MonthlyPayment", Slot.builder().withValue("3").build());
+
+        createIntentRequest("SavingsPlanIntroIntent", slots, IntentConfirmationStatus.NONE);
+        test(handler, "(.*)");
+    }
+
+    @Test
+    public void testAffordabilityServiceHandler() {
+        AffordabilityServiceHandler handler = new AffordabilityServiceHandler();
+        Map<String, Slot> slots = new HashMap<>();
+
+        // contains
+        slots.put("ProductKeyword", Slot.builder().withValue("egal").build());
+        slots.put("ProductSelection", Slot.builder().build());
+
+        createIntentRequest("AffordProduct", slots, IntentConfirmationStatus.NONE);
+        test(handler, "(.*)");
+
+        slots.put("ProductSelection", Slot.builder().withValue("5").build());
+        createIntentRequest("AffordProduct", slots, IntentConfirmationStatus.NONE);
+        test(handler, "(.*)");
+
+        slots.put("ProductSelection", Slot.builder().withValue("2").build());
+        createIntentRequest("AffordProduct", slots, IntentConfirmationStatus.NONE);
         test(handler, "(.*)");
     }
 

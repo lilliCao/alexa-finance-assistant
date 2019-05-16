@@ -30,10 +30,10 @@ public class CurrentDatabaseInfo {
                 new Contact("hanna", "DE2"));
         LOGGER.info("Delete all added contacts");
         List<Contact> contactList = dynamoDbMapper.loadAll(Contact.class);
-        for(Contact contact: contacts) {
-            for (Contact realContact: contactList) {
+        for (Contact contact : contacts) {
+            for (Contact realContact : contactList) {
                 if (contact.getIban().equalsIgnoreCase(realContact.getIban())) {
-                    LOGGER.info("Remove "+contact.getName()+"from db");
+                    LOGGER.info("Remove " + contact.getName() + "from db");
                     dynamoDbMapper.delete(new Contact(realContact.getId()));
                     break;
                 }
@@ -41,6 +41,7 @@ public class CurrentDatabaseInfo {
         }
         currentContact();
     }
+
     public static void getAllDatabaseInfo() {
         LOGGER.info("Current data in database");
         currentAcc();
@@ -55,7 +56,7 @@ public class CurrentDatabaseInfo {
     public static void currentAcc() {
         LOGGER.info("Current accounts");
         List<AccountDB> accounts = dynamoDbMapper.loadAll(AccountDB.class);
-        accounts.stream().forEach(e-> {
+        accounts.stream().forEach(e -> {
             System.out.format("acc nr=%s saving nr=%s\n",
                     e.getAccountNumber(),
                     e.getSavingsAccountNumber());
@@ -65,7 +66,7 @@ public class CurrentDatabaseInfo {
     public static void currentCate() {
         LOGGER.info("Current category");
         List<Category> cates = dynamoDbMapper.loadAll(Category.class);
-        cates.stream().forEach(e-> {
+        cates.stream().forEach(e -> {
             System.out.format("Cate=%s acc nr=%s limit=%.2f spending=%.2f\n",
                     e.getName(),
                     e.getAccountNumber(),
@@ -110,7 +111,7 @@ public class CurrentDatabaseInfo {
     public static void currentTransaction() {
         LOGGER.info("Current transaction");
         List<TransactionDB> obs = dynamoDbMapper.loadAll(TransactionDB.class);
-        obs.stream().forEach(e-> {
+        obs.stream().forEach(e -> {
             System.out.format("Transaction id=%s acc nr=%s cate id=%s peridic=%b\n",
                     e.getTransactionId(),
                     e.getAccountNumber(),
@@ -122,7 +123,7 @@ public class CurrentDatabaseInfo {
     private static void currentTemplate() {
         LOGGER.info("Current template");
         List<TransferTemplateDB> obs = dynamoDbMapper.loadAll(TransferTemplateDB.class);
-        obs.stream().forEach(e-> {
+        obs.stream().forEach(e -> {
             System.out.format("Template id=%d amount=%f date=%s target=%s\n",
                     e.getId(),
                     e.getAmount(),

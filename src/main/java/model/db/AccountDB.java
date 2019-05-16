@@ -11,7 +11,8 @@ public class AccountDB {
     private String savingsAccountNumber;
     private boolean isDemo;
 
-    public AccountDB() {}
+    public AccountDB() {
+    }
 
     public AccountDB(String accountNumber, String savingsAccountNumber, boolean isDemo) {
         this.accountNumber = accountNumber;

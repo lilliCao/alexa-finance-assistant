@@ -1,6 +1,5 @@
 import amosalexa.AccountFactory;
 import api.aws.DynamoDbMapper;
-import com.amazonaws.services.s3.transfer.Transfer;
 import model.banking.Account;
 import model.db.*;
 import org.junit.BeforeClass;
@@ -24,8 +23,6 @@ public class DemoAccountTest {
         dynamoDbMapper.dropTable(Category.class);
         LOGGER.info("Drop contact");
         dynamoDbMapper.dropTable(Contact.class);
-        LOGGER.info("Drop test");
-        dynamoDbMapper.dropTable(DynamoTestObject.class);
         LOGGER.info("Drop spending");
         dynamoDbMapper.dropTable(Spending.class);
         LOGGER.info("Drop standingorder");
@@ -46,8 +43,6 @@ public class DemoAccountTest {
         dynamoDbMapper.createTable(Category.class);
         LOGGER.info("Create contact");
         dynamoDbMapper.createTable(Contact.class);
-        LOGGER.info("Create test");
-        dynamoDbMapper.createTable(DynamoTestObject.class);
         LOGGER.info("Create spending");
         dynamoDbMapper.createTable(Spending.class);
         LOGGER.info("Create standingorder");
@@ -63,11 +58,11 @@ public class DemoAccountTest {
     }
 
     @Test
-    public void createDemoAccount(){
-       LOGGER.info("Attempt to create demo account");
-       Account demoAccount = AccountFactory.getInstance().createDemo();
-       LOGGER.info("Succeeded creating demo account");
-       LOGGER.info(demoAccount.toString());
+    public void createDemoAccount() {
+        LOGGER.info("Attempt to create demo account");
+        Account demoAccount = AccountFactory.getInstance().createDemo();
+        LOGGER.info("Succeeded creating demo account");
+        LOGGER.info(demoAccount.toString());
     }
 
 }

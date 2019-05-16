@@ -1,7 +1,7 @@
 package model.banking;
 
-import amosalexa.services.DateUtil;
-import amosalexa.services.NumberUtil;
+import amosalexa.handlers.utils.DateUtil;
+import amosalexa.handlers.utils.NumberUtil;
 import api.banking.AccountAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -165,15 +165,15 @@ public class StandingOrder extends ResourceSupport {
         INACTIVE
     }
 
-    public static double getFutureStandingOrderBalance(String accountNumber, String futureDate){
+    public static double getFutureStandingOrderBalance(String accountNumber, String futureDate) {
         Collection<StandingOrder> standingOrderCollection = AccountAPI.getStandingOrdersForAccount(accountNumber);
-        if(standingOrderCollection == null) return 0;
+        if (standingOrderCollection == null) return 0;
 
         double futureStandingOrderBalance = 0;
-        for(StandingOrder standingOrder : standingOrderCollection){
+        for (StandingOrder standingOrder : standingOrderCollection) {
             int executions = DateUtil.getDatesBetween(standingOrder.firstExecution, futureDate);
 
-            switch (standingOrder.getExecutionRate()){
+            switch (standingOrder.getExecutionRate()) {
                 case YEARLY:
                     executions = executions / 12;
                     break;
@@ -185,7 +185,7 @@ public class StandingOrder extends ResourceSupport {
                     break;
             }
 
-            if(standingOrder.getStatus().equals(StandingOrderStatus.ACTIVE)){
+            if (standingOrder.getStatus().equals(StandingOrderStatus.ACTIVE)) {
                 futureStandingOrderBalance = futureStandingOrderBalance - (executions * standingOrder.getAmount().doubleValue());
             }
         }

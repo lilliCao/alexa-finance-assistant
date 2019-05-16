@@ -18,42 +18,27 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static amosalexa.handlers.AmosStreamHandler.ACCOUNT_NUMBER;
+import static amosalexa.handlers.AmosStreamHandler.USER_ID;
+
 public class AccountFactory {
 
     private static final Logger log = LoggerFactory.getLogger(AccountFactory.class);
-
-    /**
-     * singleton
-     */
     private static AccountFactory accountFactory = new AccountFactory();
-
-    /**
-     * balance of demo account
-     */
     private static final long ACCOUNT_BALANCE_DEMO = 1000000;
-
-    /**
-     * opening date of demo account
-     */
     private static final String ACCOUNT_OPENING_DATE_DEMO = new DateTime().minusMonths(1).toString("yyyy-MM-dd");
-
-    /**
-     * date of today
-     */
     private static final String TODAY_DATE = new DateTime().toString("yyyy-MM-dd");
-
     private static final String TWO_MONTH_FROM_NOW = (new DateTime()).plusMonths(2).toString("yyyy-MM-dd");
-
-    /**
-     * dynamo db mapper
-     */
     private static DynamoDbMapper dynamoDbMapper = DynamoDbMapper.getInstance();
 
-    public static AccountFactory getInstance(){
-        synchronized (AccountFactory.class){
+    public static AccountFactory getInstance() {
+        synchronized (AccountFactory.class) {
             return accountFactory;
         }
     }
+
+    public static Account account;
+    public static Account savingAccount;
 
     /**
      * 7 transactions
@@ -69,8 +54,10 @@ public class AccountFactory {
         //removeDemoAccounts();
 
         Account existingDemoAccount = getDemoAccount();
-        if(existingDemoAccount != null) {
+        if (existingDemoAccount != null) {
             log.info("Existing demo account " + existingDemoAccount.getNumber());
+            savingAccount = createSavingsAccount();
+            account = existingDemoAccount;
             return existingDemoAccount;
         }
 
@@ -78,13 +65,13 @@ public class AccountFactory {
         createDemoUser();
 
         // create account + savings account
-        Account newDemoAccount = createDemoAccount();
-        Account newDemoSavingsAccount = createSavingsAccount();
-        log.info("-------------------------Demo account = "+newDemoAccount.getNumber());
-        log.info("-------------------------Saving account = "+newDemoSavingsAccount.getNumber());
+        account = createDemoAccount();
+        savingAccount = createSavingsAccount();
+        log.info("-------------------------Demo account = " + account.getNumber());
+        log.info("-------------------------Saving account = " + savingAccount.getNumber());
 
-        log.info("-------------------------Saving created account to db");
-        saveAccount(newDemoAccount.getNumber(), newDemoSavingsAccount.getNumber(), true);
+        log.info("-------------------------Saving created accounts to db");
+        saveAccount(account.getNumber(), savingAccount.getNumber(), true);
 
         // contact accounts
         log.info("-------------------------Creating contacts account and storing them in db");
@@ -93,42 +80,43 @@ public class AccountFactory {
 
         // categories
         log.info("-------------------------Creating categories");
-        createCategories(newDemoAccount);
+        createCategories(account);
 
         // standing orders
         log.info("-------------------------Creating standing orders");
-        createStandingOrders(newDemoAccount, contactAccounts);
+        createStandingOrders(account, contactAccounts);
 
 
         // periodic transactions
         log.info("-------------------------Creating transactions");
-        createPeriodicTransactions(newDemoAccount);
+        createPeriodicTransactions(account);
 
         //create template
         log.info("-------------------------Creating template");
         createTemplate();
 
         log.info("-------------------------Finish creating account demo-------------------------");
-        return newDemoAccount;
+        return account;
     }
 
     private void createTemplate() {
-        dynamoDbMapper.save(new TransferTemplateDB("demo target", 10));
-        dynamoDbMapper.save(new TransferTemplateDB("demo target 2", 20));
-        dynamoDbMapper.save(new TransferTemplateDB("demo target 3", 30));
-        dynamoDbMapper.save(new TransferTemplateDB("demo target 4", 40));
+        String number=account.getNumber();
+        dynamoDbMapper.save(new TransferTemplateDB("demo target 1", 10,number ));
+        dynamoDbMapper.save(new TransferTemplateDB("demo target 2", 20, number));
+        dynamoDbMapper.save(new TransferTemplateDB("demo target 3", 30, number));
+        dynamoDbMapper.save(new TransferTemplateDB("demo target 4", 40, number));
     }
 
     private void createDemoUser() {
         User user = new User();
-        user.setId(AmosAlexaSpeechlet.USER_ID);
+        user.setId(USER_ID);
         DynamoDbMapper.getInstance().save(user);
     }
 
     private void saveContactAccounts(List<Account> contactAccounts) {
         String[] names = {"bob", "bobby", "lucas", "max mustermann"};
         int i = 0;
-        for(Account contactAccount : contactAccounts){
+        for (Account contactAccount : contactAccounts) {
             Contact c = new Contact();
             c.setAccountNumber(contactAccount.getNumber());
             c.setName(names[i]);
@@ -187,20 +175,15 @@ public class AccountFactory {
     }
 
     private void createStandingOrders(Account demoAccount, List<Account> contactAccounts) {
-        for(Account contactAccount : contactAccounts){
-            StandingOrder standingOrder = AccountAPI.createStandingOrderForAccount(demoAccount.getNumber(), getContactName(contactAccount.getNumber()), 50,
+        for (Account contactAccount : contactAccounts) {
+            AccountAPI.createStandingOrderForAccount(demoAccount.getNumber(), getContactName(contactAccount.getNumber()), 50,
                     contactAccount.getIban(), TODAY_DATE, StandingOrder.ExecutionRate.MONTHLY, "Demo Dauerauftrag");
-            // Create more standing orders for StandingOrderInfoTest
-            StandingOrder standingOrder_2 = AccountAPI.createStandingOrderForAccount(demoAccount.getNumber(), getContactName(contactAccount.getNumber()), 50,
-                    contactAccount.getIban(), TODAY_DATE, StandingOrder.ExecutionRate.QUARTERLY, "Demo Dauerauftrag quarterly");
-            dynamoDbMapper.save(new StandingOrderDB(demoAccount.getNumber(), standingOrder.getStandingOrderId().toString(), getRandomCategoryId()));
-            dynamoDbMapper.save(new StandingOrderDB(demoAccount.getNumber(), standingOrder_2.getStandingOrderId().toString(), getRandomCategoryId()));
         }
     }
 
     private void createPeriodicTransactions(Account newDemoAccount) {
         int transactions[] = {31, 32, 33};
-        for(int i : transactions) {
+        for (int i : transactions) {
             TransactionDB transactionDb = (TransactionDB) dynamoDbMapper.load(TransactionDB.class, Integer.toString(i));
 
             if (transactionDb == null) {
@@ -211,11 +194,12 @@ public class AccountFactory {
                 trans.setValueDate(TWO_MONTH_FROM_NOW);
                 trans.setDescription("demo description periodic transfer");
                 trans.setPayee("demo payee periodic");
-                trans.setRemitter("demo remitter periodc");
+                trans.setRemitter("demo remitter periodic");
                 Transaction transaction = TransactionAPI.createTransaction(trans);
 
                 transactionDb = new TransactionDB(transaction.getTransactionId().toString());
                 transactionDb.setPeriodic(true);
+                transactionDb.setAccountNumber(newDemoAccount.getNumber());
                 transactionDb.setAccountNumber(newDemoAccount.getNumber());
 
             }
@@ -224,7 +208,7 @@ public class AccountFactory {
         }
     }
 
-    private String getRandomCategoryId(){
+    private String getRandomCategoryId() {
         List<Category> categoryDBList = dynamoDbMapper.loadAll(Category.class);
         int randomNum = ThreadLocalRandom.current().nextInt(0, categoryDBList.size());
         return categoryDBList.get(randomNum).getId();
@@ -232,8 +216,8 @@ public class AccountFactory {
 
     private String getContactName(String accountNumber) {
         List<Contact> contactDBList = dynamoDbMapper.loadAll(Contact.class);
-        for(Contact contactDB : contactDBList){
-            if(contactDB.getAccountNumber() != null && contactDB.getAccountNumber().equals(accountNumber))
+        for (Contact contactDB : contactDBList) {
+            if (contactDB.getAccountNumber() != null && contactDB.getAccountNumber().equals(accountNumber))
                 return contactDB.getName();
         }
         return null;
@@ -250,10 +234,19 @@ public class AccountFactory {
 
                 log.info("in Removing others data");
                 removeDemoCategories(accountDB.getAccountNumber());
-                removeDemoStandingOrders(accountDB.getAccountNumber());
                 removeDemoTransactions(accountDB.getAccountNumber());
                 removeDemoSpending(accountDB.getAccountNumber());
                 removeDemoContacts(accountDB.getAccountNumber());
+                removeDemoTemplate(accountDB.getAccountNumber());
+            }
+        }
+    }
+
+    private void removeDemoTemplate(String accountNumber) {
+        List<TransferTemplateDB> templateDBList = dynamoDbMapper.loadAll(TransferTemplateDB.class);
+        for (TransferTemplateDB template : templateDBList) {
+            if (template.getAccountNumber() != null && template.getAccountNumber().equals(accountNumber)) {
+                dynamoDbMapper.delete(template);
             }
         }
     }
@@ -272,15 +265,6 @@ public class AccountFactory {
         for (TransactionDB transactionDB : categoryDBListList) {
             if (transactionDB.getAccountNumber().equals(accountNumber)) {
                 dynamoDbMapper.delete(transactionDB);
-            }
-        }
-    }
-
-    private void removeDemoStandingOrders(String accountNumber) {
-        List<StandingOrderDB> standingOrderDBList = dynamoDbMapper.loadAll(StandingOrderDB.class);
-        for (StandingOrderDB standingOrderDB : standingOrderDBList) {
-            if (standingOrderDB.getAccountNumber().equals(accountNumber)) {
-                dynamoDbMapper.delete(standingOrderDB);
             }
         }
     }
@@ -329,7 +313,6 @@ public class AccountFactory {
      * @param isDemo        is valid account for demo
      */
     private void saveAccount(String accountNumber, String savingsAccountNumber, boolean isDemo) {
-        // removeDemoAccounts();
         dynamoDbMapper.save(new AccountDB(accountNumber, savingsAccountNumber, isDemo));
     }
 

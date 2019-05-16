@@ -1,8 +1,8 @@
 package amosalexa.handlers.financing;
 
 import amosalexa.handlers.Service;
-import amosalexa.services.DateUtil;
-import amosalexa.services.NumberUtil;
+import amosalexa.handlers.utils.DateUtil;
+import amosalexa.handlers.utils.NumberUtil;
 import api.banking.AccountAPI;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;

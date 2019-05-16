@@ -27,6 +27,10 @@ public class AmosStreamHandler extends SkillStreamHandler {
     public static final String USER_ID = "4711";
     private static final Account demoAccount = AccountFactory.getInstance().createDemo();
     public static final String ACCOUNT_NUMBER = demoAccount.getNumber();
+    public static final String ACCOUNT_IBAN = demoAccount.getIban();
+    public static final String ACCOUNT_SAVING_NUMBER = AccountFactory.savingAccount.getNumber();
+    public static final String ACCOUNT_SAVING_IBAN = AccountFactory.savingAccount.getIban();
+
     public static DynamoDbMapper dynamoDbMapper = DynamoDbMapper.getInstance();
     public static final Number SECURITIES_ACCOUNT_ID = 1;
     public static final String BANK_NAME = "Sparkasse";

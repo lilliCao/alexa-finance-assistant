@@ -1,7 +1,6 @@
 package amosalexa.handlers.bankaccount;
 
-import amosalexa.Service;
-import amosalexa.services.help.HelpService;
+import amosalexa.handlers.Service;
 import api.banking.AccountAPI;
 import api.banking.TransactionAPI;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
@@ -26,13 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static amosalexa.AmosAlexaSpeechlet.ACCOUNT_IBAN;
-import static amosalexa.handlers.AmosStreamHandler.ACCOUNT_NUMBER;
-import static amosalexa.handlers.AmosStreamHandler.dynamoDbMapper;
+import static amosalexa.handlers.AmosStreamHandler.*;
 import static amosalexa.handlers.ResponseHelper.*;
 
 @Service(
-        functionGroup = HelpService.FunctionGroup.ONLINE_BANKING,
+        functionGroup = Service.FunctionGroup.ONLINE_BANKING,
         functionName = "Überweisung",
         example = "Überweise zehn Euro an Bob!",
         description = "Mit dieser Funktion kannst du Überweisungen an deine Kontakte tätigen. Du kannst dabei Parameter wie " +
