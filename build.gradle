@@ -124,7 +124,7 @@ task extendedTests(type: Test) {
 
 
 build.dependsOn fatJar
-//build.dependsOn buildZip
+build.dependsOn buildZip
 
 /*
 //jacoco coverage
