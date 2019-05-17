@@ -56,18 +56,14 @@ public class FinanceApi {
         try {
             jsonObject.put("idType", "ID_ISIN");
             jsonObject.put("idValue", security.getIsin());
-        } catch (JSONException e) {
-            LOGGER.error(e.getMessage());
-        }
-        jsonArray.put(jsonObject);
-        JsonNode responseNode = post(ConfigurationAMOS.standardFinanceSymbolApi, jsonArray.toString());
-        try {
+            jsonArray.put(jsonObject);
+            JsonNode responseNode = post(ConfigurationAMOS.standardFinanceSymbolApi, jsonArray.toString());
             JsonNode data = responseNode.get(0).get("data").get(0);
             return data.get("exchCode").asText();
-        } catch (JSONException e) {
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
+            return null;
         }
-        return null;
     }
 
     public static String getStockPrice(Security security) {
