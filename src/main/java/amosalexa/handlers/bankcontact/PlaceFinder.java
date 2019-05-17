@@ -41,7 +41,7 @@ public class PlaceFinder {
      * @return LatLng of device
      */
     private static LatLng getLatLng(Address address) {
-        GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAP_API_KEY);
+        GeoApiContext context = new GeoApiContext.Builder().apiKey(GOOGLE_MAP_API_KEY).build();
         GeocodingResult[] results = null;
         if (address != null) {
             LOGGER.info("Your address: " + address.getCity() + " " + address.getAddressLine1());
