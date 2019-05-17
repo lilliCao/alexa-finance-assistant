@@ -17,7 +17,7 @@ public class LocationTest {
 
     @Test
     public void geoCodingTest() throws InterruptedException, ApiException, IOException {
-        GeoApiContext context = new GeoApiContext().setApiKey(ConfigurationAMOS.googleGeoCodingApiKey);
+        GeoApiContext context = new GeoApiContext.Builder().apiKey(ConfigurationAMOS.googleGeoCodingApiKey).build();
         GeocodingResult[] results = GeocodingApi.geocode(context,
                 "Wölkernstraße 11 90459 Nürnberg").await();
         for (GeocodingResult result : results) {

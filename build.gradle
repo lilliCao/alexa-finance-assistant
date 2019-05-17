@@ -66,8 +66,13 @@ dependencies {
     compile 'se.walkercrou:google-places-api-java:2.1.7'
     compile 'com.google.maps:google-maps-services:0.9.3'
 
-    // unupdate because of huge refactor in new version
+    // no :q
+    // update because of huge refactor in new version
     compile 'org.springframework.hateoas:spring-hateoas:0.24.0.BUILD-SNAPSHOT'
+    compile 'org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE'
+    compile 'com.jayway.jsonpath:json-path:2.2.0'
+
+
 
     compile 'org.jtwig:jtwig-core:5.87.0.RELEASE'
     compile 'org.reflections:reflections:0.9.11'

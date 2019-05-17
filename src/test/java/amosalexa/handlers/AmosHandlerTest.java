@@ -9,6 +9,7 @@ import amosalexa.handlers.financing.AccountBalanceForecastServiceHandler;
 import amosalexa.handlers.financing.AffordabilityServiceHandler;
 import amosalexa.handlers.financing.SavingPlanServiceHandler;
 import amosalexa.handlers.financing.TransactionForecastServiceHandler;
+import amosalexa.handlers.securitiesAccount.SecuritiesAccountInformationServiceHandler;
 import com.amazon.ask.model.IntentConfirmationStatus;
 import com.amazon.ask.model.Slot;
 import com.amazon.ask.model.SlotConfirmationStatus;
@@ -231,6 +232,15 @@ public class AmosHandlerTest {
         slots.put("ProductSelection", Slot.builder().withValue("2").build());
         createIntentRequest("AffordProduct", slots, IntentConfirmationStatus.NONE);
         test(handler, "(.*)");
+    }
+
+    @Test
+    public void testSecuritiesAccountInformation() {
+        SecuritiesAccountInformationServiceHandler handler = new SecuritiesAccountInformationServiceHandler();
+        Map<String, Slot> slots  = new HashMap<>();
+        slots.put("NextIndex", Slot.builder().build());
+        createIntentRequest("SecuritiesAccountInformationIntent", slots);
+        test(handler, ".*");
     }
 
 }
