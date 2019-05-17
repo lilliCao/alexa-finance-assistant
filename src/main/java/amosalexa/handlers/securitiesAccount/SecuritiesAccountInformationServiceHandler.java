@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.SECURITIES_ACCOUNT_ID;
-import static amosalexa.handlers.ResponseHelper.response;
-import static amosalexa.handlers.ResponseHelper.responseWithSlotConfirm;
+import static amosalexa.handlers.ResponseHelper.*;
 
 @Service(
         functionGroup = Service.FunctionGroup.ACCOUNT_INFORMATION,
@@ -47,6 +46,7 @@ public class SecuritiesAccountInformationServiceHandler implements IntentRequest
 
         if (nextIndex.getValue() == null) {
             // first
+            responseDirective(input, "Ich sammele gerade alle Information über deine Wertpapiere. Bitte warte kurz.");
             StringBuilder builder = new StringBuilder();
             builder.append("Du hast momentan ")
                     .append(securities.size() == 1 ? "ein Wertpapier in deinem Depot. " : securities.size())

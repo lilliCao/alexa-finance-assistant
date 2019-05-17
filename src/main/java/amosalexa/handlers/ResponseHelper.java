@@ -3,6 +3,10 @@ package amosalexa.handlers;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.Response;
+import com.amazon.ask.model.services.directive.DirectiveServiceClient;
+import com.amazon.ask.model.services.directive.Header;
+import com.amazon.ask.model.services.directive.SendDirectiveRequest;
+import com.amazon.ask.model.services.directive.SpeakDirective;
 
 import java.util.Arrays;
 import java.util.List;
@@ -73,6 +77,18 @@ public class ResponseHelper {
                 .addElicitSlotDirective(slotName, intent)
                 .withShouldEndSession(false)
                 .build();
+    }
+
+    public static void responseDirective(HandlerInput input, String speech) {
+        final DirectiveServiceClient directiveServiceClient = input.getServiceClientFactory().getDirectiveService();
+        directiveServiceClient.enqueue(SendDirectiveRequest.builder()
+                .withHeader(Header.builder()
+                        .withRequestId(input.getRequestEnvelope().getRequest().getRequestId())
+                        .build())
+                .withDirective(SpeakDirective.builder()
+                        .withSpeech(speech)
+                        .build())
+                .build());
     }
 
 }

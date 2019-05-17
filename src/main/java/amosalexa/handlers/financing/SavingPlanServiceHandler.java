@@ -18,8 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.*;
-import static amosalexa.handlers.ResponseHelper.response;
-import static amosalexa.handlers.ResponseHelper.responseWithIntentConfirm;
+import static amosalexa.handlers.ResponseHelper.*;
 
 
 @Service(
@@ -78,6 +77,7 @@ public class SavingPlanServiceHandler implements IntentRequestHandler {
                 Number saveAmount = (Integer) sessionAtt.get(SAVE_BASIC_AMOUNT);
                 Number saveMonthlyPayment = (Integer) sessionAtt.get(SAVE_MONTHLY_PAYMENT);
 
+                responseDirective(input, "Ich lege jetzt deinen Sparplan an. Bitte warte kurz.");
                 // transfer basic amount
                 String valueDate = DateUtil.formatterStandard.format(new Date());
                 TransactionAPI.createTransaction(saveAmount, ACCOUNT_IBAN, ACCOUNT_SAVING_IBAN, valueDate,

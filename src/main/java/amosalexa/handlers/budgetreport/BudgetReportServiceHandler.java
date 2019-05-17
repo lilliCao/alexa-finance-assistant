@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.dynamoDbMapper;
 import static amosalexa.handlers.ResponseHelper.response;
+import static amosalexa.handlers.ResponseHelper.responseDirective;
 
 @Service(
         functionName = "Budget-Report anfordern",
@@ -48,6 +49,7 @@ public class BudgetReportServiceHandler implements IntentRequestHandler {
         String body = template.render(model);
 
         boolean isSuccess = EMailClient.SendHTMLEMail(CARD_TITLE, body);
+        responseDirective(input, "Ich sende gerade deinen Ausgabenreport. Bitte warte kurz.");
         String answer = isSuccess? "Okay, ich habe dir deinen Ausgabenreport per E-Mail gesendet."
                 : "Ein Fehler ist aufgetreten. Leider konnte der Ausgabenreport nicht gesendet werden.";
         return response(input, CARD_TITLE, answer);
