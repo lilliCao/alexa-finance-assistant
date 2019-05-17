@@ -1,52 +1,78 @@
-import amosalexa.AccountFactory;
+package amosalexa;
+
 import api.aws.DynamoDbMapper;
 import api.banking.AccountAPI;
-import configuration.ConfigurationAMOS;
+import model.banking.Account;
 import model.banking.StandingOrder;
 import model.db.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class CurrentDatabaseInfo {
-    private static Logger LOGGER = LoggerFactory.getLogger(ConfigurationAMOS.class);
+public class DemoAccount {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(DemoAccount.class);
     private static DynamoDbMapper dynamoDbMapper = DynamoDbMapper.getInstance();
 
-    public static void main(String[] args) {
-        //recreateContactIfTestFail();
-        //getAllDatabaseInfo();
-        //currentAcc();
-        //currentTransaction();
-        //currentTemplate();
-        currentTransaction();
+    public static void main(String[] args) throws InterruptedException {
+        // create demo account from scratch
+        createDemoAccount();
+        // get current account information
+        getAllDatabaseInfo();
     }
 
-    public static void recreateContactIfTestFail() {
-        // Rebuild contact db
-        currentContact();
-        List<Contact> contacts = Arrays.asList(
-                new Contact("Taylor Marley", "UK1"),
-                new Contact("Taylor Ray Simmons", "UK2"),
-                new Contact("Tim", "DE1"),
-                new Contact("hanna", "DE2"));
-        LOGGER.info("Delete all added contacts");
-        List<Contact> contactList = dynamoDbMapper.loadAll(Contact.class);
-        for (Contact contact : contacts) {
-            for (Contact realContact : contactList) {
-                if (contact.getIban().equalsIgnoreCase(realContact.getIban())) {
-                    LOGGER.info("Remove " + contact.getName() + "from db");
-                    dynamoDbMapper.delete(new Contact(realContact.getId()));
-                    break;
-                }
-            }
-        }
-        currentContact();
+    public static void createDemoAccount() throws InterruptedException {
+        createTables();
+        LOGGER.info("Attempt to create demo account");
+        Account demoAccount = AccountFactory.getInstance().createDemo();
+        LOGGER.info("Succeeded creating demo account");
+        LOGGER.info(demoAccount.toString());
     }
 
-    public static void getAllDatabaseInfo() {
+    private static void createTables() throws InterruptedException {
+        // Drop and recreate tables
+        LOGGER.info("Drop all tables");
+        LOGGER.info("Drop account db");
+        dynamoDbMapper.dropTable(AccountDB.class);
+        LOGGER.info("Drop category");
+        dynamoDbMapper.dropTable(Category.class);
+        LOGGER.info("Drop contact");
+        dynamoDbMapper.dropTable(Contact.class);
+        LOGGER.info("Drop spending");
+        dynamoDbMapper.dropTable(Spending.class);
+        LOGGER.info("Drop transaction");
+        dynamoDbMapper.dropTable(TransactionDB.class);
+        LOGGER.info("Drop user");
+        dynamoDbMapper.dropTable(model.db.User.class);
+        LOGGER.info("Drop last_ids");
+        dynamoDbMapper.dropTable(LastIds.class);
+        LOGGER.info("Drop template");
+        dynamoDbMapper.dropTable(TransferTemplateDB.class);
+
+        LOGGER.info("Create all tables");
+        LOGGER.info("Create account db");
+        dynamoDbMapper.createTable(AccountDB.class);
+        LOGGER.info("Create category");
+        dynamoDbMapper.createTable(Category.class);
+        LOGGER.info("Create contact");
+        dynamoDbMapper.createTable(Contact.class);
+        LOGGER.info("Create spending");
+        dynamoDbMapper.createTable(Spending.class);
+        LOGGER.info("Create transaction");
+        dynamoDbMapper.createTable(TransactionDB.class);
+        LOGGER.info("Create user");
+        dynamoDbMapper.createTable(model.db.User.class);
+        LOGGER.info("Create last_ids");
+        dynamoDbMapper.createTable(LastIds.class);
+        LOGGER.info("Create template");
+        dynamoDbMapper.createTable(TransferTemplateDB.class);
+    }
+
+    private static void getAllDatabaseInfo() {
         LOGGER.info("Current data in database");
         currentAcc();
         currentCate();
@@ -57,7 +83,7 @@ public class CurrentDatabaseInfo {
         currentTemplate();
     }
 
-    public static void currentAcc() {
+    private static void currentAcc() {
         LOGGER.info("Current accounts");
         List<AccountDB> accounts = dynamoDbMapper.loadAll(AccountDB.class);
         accounts.stream().forEach(e -> {
@@ -67,7 +93,7 @@ public class CurrentDatabaseInfo {
         });
     }
 
-    public static void currentCate() {
+    private static void currentCate() {
         LOGGER.info("Current category");
         List<Category> cates = dynamoDbMapper.loadAll(Category.class);
         cates.stream().forEach(e -> {
@@ -79,7 +105,7 @@ public class CurrentDatabaseInfo {
         });
     }
 
-    public static void currentContact() {
+    private static void currentContact() {
         LOGGER.info("Current contact");
         List<Contact> obs = dynamoDbMapper.loadAll(Contact.class);
         obs.stream().forEach(e -> {
@@ -90,7 +116,7 @@ public class CurrentDatabaseInfo {
         });
     }
 
-    public static void currentSpending() {
+    private static void currentSpending() {
         LOGGER.info("Current spending");
         List<Spending> obs = dynamoDbMapper.loadAll(Spending.class);
         obs.stream().forEach(e -> {
@@ -101,7 +127,7 @@ public class CurrentDatabaseInfo {
         });
     }
 
-    public static void currentStandingorder() {
+    private static void currentStandingorder() {
         LOGGER.info("Current standingorder");
         List<StandingOrder> obs = new ArrayList
                 (AccountAPI.getStandingOrdersForAccount(AccountFactory.account.getNumber()));
@@ -114,7 +140,7 @@ public class CurrentDatabaseInfo {
         });
     }
 
-    public static void currentTransaction() {
+    private static void currentTransaction() {
         LOGGER.info("Current periodic transaction");
         List<TransactionDB> obs = dynamoDbMapper.loadAll(TransactionDB.class);
         obs.stream().forEach(e -> {
@@ -137,4 +163,5 @@ public class CurrentDatabaseInfo {
                     e.getTarget());
         });
     }
+
 }
