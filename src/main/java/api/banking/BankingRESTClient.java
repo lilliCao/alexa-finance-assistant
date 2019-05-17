@@ -149,21 +149,4 @@ public class BankingRESTClient {
         HttpEntity entity = new HttpEntity(null, generateHttpHeaders());
         restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
     }
-
-
-    /**
-     * POST http request to the endpoint given by parameter URL
-     *
-     * @param objectPath endpoint object
-     * @param json       body
-     * @return banking object
-     */
-    public String postAnyObject(String objectPath, String json) {
-        log.info("POST from API: " + objectPath + " Body: " + json);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<String> entity = new HttpEntity<>(json, headers);
-        return restTemplate.postForObject(objectPath, entity, String.class);
-    }
 }

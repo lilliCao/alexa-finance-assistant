@@ -46,24 +46,10 @@ public class EMailClient {
                 .withDestination(destination).withMessage(message);
 
         try {
-			/*AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard()
-					.withCredentials(new AWSStaticCredentialsProvider(new AWSCredentials() {
-						@Override
-						public String getAWSAccessKeyId() {
-							return "...";
-						}
-
-						@Override
-						public String getAWSSecretKey() {
-							return "...";
-						}
-					}))
-					.withRegion(Regions.EU_WEST_1).build();*/
-
             AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard()
                     .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(
                             ConfigurationAMOS.awsAccessKey, ConfigurationAMOS.awsSecretKey)))
-                    .withRegion(Regions.EU_WEST_1)
+                    .withRegion(Regions.US_EAST_1)
                     .build();
 
             // Send the email.
@@ -82,4 +68,5 @@ public class EMailClient {
     public static boolean SendHTMLEMail(String subject, String body) {
         return doSendEMail(subject, body, true);
     }
+
 }

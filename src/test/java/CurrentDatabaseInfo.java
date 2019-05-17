@@ -1,9 +1,13 @@
+import amosalexa.AccountFactory;
 import api.aws.DynamoDbMapper;
+import api.banking.AccountAPI;
 import configuration.ConfigurationAMOS;
+import model.banking.StandingOrder;
 import model.db.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -99,17 +103,19 @@ public class CurrentDatabaseInfo {
 
     public static void currentStandingorder() {
         LOGGER.info("Current standingorder");
-        List<StandingOrderDB> obs = dynamoDbMapper.loadAll(StandingOrderDB.class);
+        List<StandingOrder> obs = new ArrayList
+                (AccountAPI.getStandingOrdersForAccount(AccountFactory.account.getNumber()));
         obs.stream().forEach(e -> {
-            System.out.format("Standingorder id=%s cate id=%s acc nr=%s\n",
+            System.out.format("Standingorder id=%s amount=%f %s to %s \n",
                     e.getStandingOrderId(),
-                    e.getCategoryId(),
-                    e.getAccountNumber());
+                    e.getAmount().doubleValue(),
+                    e.getExecutionRateString(),
+                    e.getPayee());
         });
     }
 
     public static void currentTransaction() {
-        LOGGER.info("Current transaction");
+        LOGGER.info("Current periodic transaction");
         List<TransactionDB> obs = dynamoDbMapper.loadAll(TransactionDB.class);
         obs.stream().forEach(e -> {
             System.out.format("Transaction id=%s acc nr=%s cate id=%s peridic=%b\n",

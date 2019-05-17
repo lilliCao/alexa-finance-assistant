@@ -91,7 +91,6 @@ public class AuthenticationAPI {
 
             // Update the user object in the db
             DynamoDbMapper.getInstance().save(user);
-            //DynamoDbClient.instance.putItem(model.db.User.TABLE_NAME, user);
         }
 
         if (shouldRefresh(user)) {
@@ -124,7 +123,6 @@ public class AuthenticationAPI {
 
             // Update the user object in the db
             DynamoDbMapper.getInstance().save(user);
-            //DynamoDbClient.instance.putItem(model.db.User.TABLE_NAME, user);
         }
     }
 

@@ -1,35 +1,56 @@
 package amosalexa.handlers.securitiesAccount;
 
-import api.banking.BankingRESTClient;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import configuration.ConfigurationAMOS;
 import model.banking.Security;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
 public class FinanceApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FinanceApi.class);
+    private static RestTemplate restTemplate = new RestTemplate();
+    private static ObjectMapper mapper = new ObjectMapper();
 
-    OkHttpClient client = new OkHttpClient();
-
-    private String run(String url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            return response.body().string();
+    /**
+     * POST http request to the endpoint given by parameter URL
+     *
+     * @param objectPath endpoint object
+     * @param json       body
+     * @return banking object
+     */
+    private static JsonNode post(String objectPath, String json) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(json, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(objectPath, entity, String.class);
+        try {
+            return mapper.readTree(response.getBody());
+        } catch (IOException e) {
+            return null;
         }
     }
 
-    private static String getTickerSymbolForIsin(Security security) {
+    private static JsonNode get(String objectPath) {
+        ResponseEntity<String> response = restTemplate.getForEntity(objectPath, String.class);
+        try {
+            return mapper.readTree(response.getBody());
+        } catch (IOException e) {
+            return null;
+        }
+    }
+    private static String getExchSymbolForIsin(Security security) {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -39,15 +60,10 @@ public class FinanceApi {
             LOGGER.error(e.getMessage());
         }
         jsonArray.put(jsonObject);
-
-        BankingRESTClient bankingRESTClient = BankingRESTClient.getInstance();
-        String requestResponse = bankingRESTClient.postAnyObject("https://api.openfigi.com/v1/mapping", jsonArray.toString());
-        requestResponse = requestResponse.substring(10, requestResponse.length() - 1);
-        //LOGGER.info("Request Response: " + requestResponse);
+        JsonNode responseNode = post(ConfigurationAMOS.standardFinanceSymbolApi, jsonArray.toString());
         try {
-            final JSONObject obj = new JSONObject(requestResponse);
-            String tickerSymbol = obj.getString("ticker");
-            return tickerSymbol;
+            JsonNode data = responseNode.get(0).get("data").get(0);
+            return data.get("exchCode").asText();
         } catch (JSONException e) {
             LOGGER.error(e.getMessage());
         }
@@ -55,31 +71,16 @@ public class FinanceApi {
     }
 
     public static String getStockPrice(Security security) {
-        return "100";
-        // TODO api was shut down -> find other
-        /*
-        String tickerSymbol = getTickerSymbolForIsin(security);
+        String exchCode = getExchSymbolForIsin(security);
 
-        try {
-            FinanceApi finance = new FinanceApi();
-            String response = finance.run("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22" + tickerSymbol + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=l");
-
-            //FIXME magic number...
-            response = response.substring(93, response.length() - 2);
-
-            final JSONObject jsonObject = new JSONObject(response);
-            //LOGGER.info("Stock Price Object: " + jsonObject);
-
-            String stockPrice = jsonObject.getString("LastTradePriceOnly");
-            LOGGER.info("Stock price for " + tickerSymbol + ": " + stockPrice);
-            return stockPrice;
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        } catch (JSONException e) {
-            LOGGER.error(e.getMessage());
+        if(exchCode!=null) {
+            JsonNode jsonNode = get(ConfigurationAMOS.stockPriceApiEndpoint
+                    + "/query?function=GLOBAL_QUOTE&symbol=" + exchCode
+                    + "&apikey=" + ConfigurationAMOS.stockPriceApiKey);
+            if(jsonNode!=null) {
+                return jsonNode.get("Global Quote").get("05. price").asText();
+            }
         }
-
         return null;
-        */
     }
 }

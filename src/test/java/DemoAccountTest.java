@@ -25,8 +25,6 @@ public class DemoAccountTest {
         dynamoDbMapper.dropTable(Contact.class);
         LOGGER.info("Drop spending");
         dynamoDbMapper.dropTable(Spending.class);
-        LOGGER.info("Drop standingorder");
-        dynamoDbMapper.dropTable(StandingOrderDB.class);
         LOGGER.info("Drop transaction");
         dynamoDbMapper.dropTable(TransactionDB.class);
         LOGGER.info("Drop user");
@@ -45,8 +43,6 @@ public class DemoAccountTest {
         dynamoDbMapper.createTable(Contact.class);
         LOGGER.info("Create spending");
         dynamoDbMapper.createTable(Spending.class);
-        LOGGER.info("Create standingorder");
-        dynamoDbMapper.createTable(StandingOrderDB.class);
         LOGGER.info("Create transaction");
         dynamoDbMapper.createTable(TransactionDB.class);
         LOGGER.info("Create user");

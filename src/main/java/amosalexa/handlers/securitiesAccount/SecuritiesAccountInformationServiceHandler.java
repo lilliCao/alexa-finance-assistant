@@ -56,12 +56,14 @@ public class SecuritiesAccountInformationServiceHandler implements IntentRequest
                 if (i < securities.size()) {
                     Security security = securities.get(i);
                     String stockPrice = FinanceApi.getStockPrice(security);
+                    String stockPriceText = stockPrice==null ? " leider keine aktuelle Preise vorhanden. "
+                            : "mit einem momentanen Wert von "+stockPrice+" Euro.";
                     builder.append("Wertpapier Nummer ")
                             .append(security.getSecurityId())
                             .append(": ").append(security.getDescription())
                             .append(", " + security.getQuantity() + " Stueck, ")
-                            .append("mit einem momentanen Wert von ")
-                            .append(stockPrice).append(" Euro. ");
+                            .append(stockPriceText);
+
                 }
             }
             if (securities.size() > SECURITIES_LIMIT) {
@@ -78,12 +80,14 @@ public class SecuritiesAccountInformationServiceHandler implements IntentRequest
             StringBuilder builder = new StringBuilder();
             Security security = securities.get(position);
             String stockPrice = FinanceApi.getStockPrice(security);
+            String stockPriceText = stockPrice==null ? " leider keine aktuelle Preise vorhanden. "
+                    : "mit einem momentanen Wert von "+stockPrice+" Euro.";
             builder.append("Wertpapier Nummer ")
                     .append(security.getSecurityId())
                     .append(": ").append(security.getDescription())
                     .append(", " + security.getQuantity() + " Stueck, ")
-                    .append("mit einem momentanen Wert von ")
-                    .append(stockPrice).append(" Euro. ");
+                    .append(stockPriceText);
+
             position++;
             if (position < securities.size()) {
                 builder.append("Moechtest du einen weiteren Eintrag hoeren?");

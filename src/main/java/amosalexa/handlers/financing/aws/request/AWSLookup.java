@@ -48,5 +48,4 @@ public class AWSLookup {
 
         return ItemCreator.createItem(xml);
     }
-
 }

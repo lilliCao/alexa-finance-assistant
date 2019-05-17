@@ -3,6 +3,7 @@ package amosalexa.handlers.financing;
 import amosalexa.handlers.Service;
 import amosalexa.handlers.financing.aws.model.Item;
 import amosalexa.handlers.financing.aws.util.AWSUtil;
+import api.aws.EMailClient;
 import api.banking.AccountAPI;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
@@ -56,7 +57,7 @@ public class AffordabilityServiceHandler implements IntentRequestHandler {
             // show product selection
             //items = AWSLookup.itemSearch(keyword, 1, null);
 
-            //demo item for test alexa
+            // TODO demo item for test alexa because Amazon Advertising API not work yet
             Item item1 = new Item();
             Item item2 = new Item();
             Item item3 = new Item();
@@ -64,6 +65,7 @@ public class AffordabilityServiceHandler implements IntentRequestHandler {
             for (int i = 0; i < items.size(); i++) {
                 items.get(i).setTitle("Helloworld item " + i);
                 items.get(i).setLowestNewPrice(100 + i);
+                items.get(i).setDetailPageURL("https://senacor.com/");
             }
 
 
@@ -113,8 +115,7 @@ public class AffordabilityServiceHandler implements IntentRequestHandler {
         } else if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
             //send email
             Map<String, Object> sessionAtt = input.getAttributesManager().getSessionAttributes();
-            // TODO fix email client
-            // EMailClient.SendEMail("Amazon Produkt: " + sessionAtt.get(SAVE_NAME), (String) sessionAtt.get(SAVE_URL));
+            EMailClient.SendEMail("Amazon Produkt: " + sessionAtt.get(SAVE_NAME), (String) sessionAtt.get(SAVE_URL));
             return response(input, CARD_TITLE, "Ich habe eine Link per Email geschickt");
         } else {
             return response(input, CARD_TITLE);

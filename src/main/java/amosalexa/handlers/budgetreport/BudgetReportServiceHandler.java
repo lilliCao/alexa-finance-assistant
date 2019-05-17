@@ -1,6 +1,7 @@
 package amosalexa.handlers.budgetreport;
 
 import amosalexa.handlers.Service;
+import api.aws.EMailClient;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
 import com.amazon.ask.model.IntentRequest;
@@ -46,10 +47,9 @@ public class BudgetReportServiceHandler implements IntentRequestHandler {
         // Render mail template
         String body = template.render(model);
 
-        String answer = "Okay, ich habe dir deinen Ausgabenreport per E-Mail gesendet.";
-        // TODO send with email client
-        // boolean isSuccess = EMailClient.SendHTMLEMail(CARD_TITLE, body);
-        // answer = "Leider konnte der Ausgabenreport nicht gesendet werden.";
+        boolean isSuccess = EMailClient.SendHTMLEMail(CARD_TITLE, body);
+        String answer = isSuccess? "Okay, ich habe dir deinen Ausgabenreport per E-Mail gesendet."
+                : "Ein Fehler ist aufgetreten. Leider konnte der Ausgabenreport nicht gesendet werden.";
         return response(input, CARD_TITLE, answer);
     }
 }

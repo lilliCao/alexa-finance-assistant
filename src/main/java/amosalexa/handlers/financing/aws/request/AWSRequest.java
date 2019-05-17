@@ -1,6 +1,7 @@
 package amosalexa.handlers.financing.aws.request;
 
 import amosalexa.handlers.financing.aws.util.XMLParser;
+import configuration.ConfigurationAMOS;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -19,9 +20,9 @@ public class AWSRequest {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(AWSRequest.class);
 
-    private static final String AWS_SECRET_KEY = "vVafGHDBSi5ma78QwwcEmLWVMsDUEmd13XaNcjDh";
-    private static final String AWS_KEY = "AKIAJD4O7BRHWN5W3JIA";
-    private static final String AWS_ENDPOINT = "webservices.amazon.de";
+    private static final String AWS_SECRET_KEY = ConfigurationAMOS.awsSecretKey; //"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";
+    private static final String AWS_KEY = ConfigurationAMOS.awsAccessKey; //"AKIAJD4O7BRHWN5W3JIA";
+    private static final String AWS_ENDPOINT = ConfigurationAMOS.awsEndpoint;
 
     private Map<String, String> addParams;
 
