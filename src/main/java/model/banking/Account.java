@@ -47,7 +47,7 @@ public class Account {
         balanceText = "Dein " + balanceSlot + " beträgt <say-as interpret-as=\"unit\">€" + balance + "</say-as>";
         openingDateText = "Dein " + openingDateSlot + " war " + openingDate;
         creditLimitText = "Dein " + creditLimitSlot + " beträgt <say-as interpret-as=\"unit\">€" + creditcardLimit + "</say-as>";
-        numberText = "Deine " + DialogUtil.readNumberAsDigit(numberSlot) + " lautet " + number;
+        numberText = "Deine " + numberSlot + " lautet " + DialogUtil.readNumberAsDigit(number);
         interestRateText = "Dein " + interestRateSlot + " ist aktuell " + interestRate;
         withdrawalFeeText = "Deine " + withdrawalFeeSlot + " beträgt <say-as interpret-as=\"unit\">€" + withdrawalFee + "</say-as>";
         ibanText = "Deine " + ibanSlot + " lautet " + DialogUtil.getIbanSsmlOutput(iban);
