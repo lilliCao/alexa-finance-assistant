@@ -9,7 +9,6 @@ buildscript {
 
 plugins {
     id 'java'
-    // id 'jacoco'
     id "com.github.ben-manes.versions" version "0.21.0"
 }
 
@@ -29,12 +28,29 @@ sourceSets {
             srcDirs = ["src/main/java"]
         }
     }
-
+    
     test {
         java {
             srcDirs = ["src/test/java"]
         }
     }
+}
+
+// no test yet
+test {
+    exclude '**/*'
+}
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    tasks.withType(Test) {
+        systemProperty "file.encoding", "UTF-8"
+    }
+
+    //apply plugin for unused dep: 'ca.cutterslade.analyze'
 }
 
 repositories {
@@ -49,15 +65,11 @@ dependencies {
     compile group: 'com.amazon.alexa', name: 'ask-sdk', version: '2.17.2'
     compile group: 'com.amazonaws', name: 'aws-java-sdk-ses', version: '1.11.554'
 
-    //compile 'com.amazonaws:aws-lambda-java-core:1.0.0'
     compile 'com.amazonaws:aws-java-sdk-dynamodb:1.11.554'
 
     compile 'log4j:log4j:1.2.17'
     compile 'org.slf4j:slf4j-api:1.8.0-beta4'
     compile 'org.apache.commons:commons-lang3:3.9'
-
-    //compile 'org.eclipse.jetty:jetty-server:9.0.6.v20130930'
-    //compile 'org.eclipse.jetty:jetty-servlet:9.0.6.v20130930'
 
     compile group: 'org.json', name: 'json', version: '20180813'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9'
@@ -65,14 +77,11 @@ dependencies {
 
     compile 'se.walkercrou:google-places-api-java:2.1.7'
     compile 'com.google.maps:google-maps-services:0.9.3'
-
-    // no :q
-    // update because of huge refactor in new version
+    
+    // no update because of huge refactor in new version
     compile 'org.springframework.hateoas:spring-hateoas:0.24.0.BUILD-SNAPSHOT'
     compile 'org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE'
     compile 'com.jayway.jsonpath:json-path:2.2.0'
-
-
 
     compile 'org.jtwig:jtwig-core:5.87.0.RELEASE'
     compile 'org.reflections:reflections:0.9.11'
@@ -86,93 +95,10 @@ task fatJar(type: Jar) {
     with jar
 }
 
-task buildZip(type: Zip) {
-    baseName = project.name + '-fat'
-    from compileJava
-    from processResources
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    into('lib') {
-        from configurations.runtime
-    }
+task update_lambda(type: Exec) {
+    commandLine './update_lambda.sh'
 }
-
-allprojects {
-    tasks.withType(JavaCompile) {
-        options.encoding = 'UTF-8'
-    }
-
-    tasks.withType(Test) {
-        systemProperty "file.encoding", "UTF-8"
-    }
-
-    //apply plugin: 'ca.cutterslade.analyze'
-}
-
-task simpleTests(type: Test) {
-    outputs.upToDateWhen { false }
-    useJUnit {
-        excludeCategories 'amosalexa.AmosAlexaExtendedTest'
-    }
-}
-
-task extendedTests(type: Test) {
-    outputs.upToDateWhen { false }
-    useJUnit {
-        excludeCategories 'amosalexa.AmosAlexaSimpleTest'
-    }
-}
-
 
 build.dependsOn fatJar
-build.dependsOn buildZip
+build.dependsOn update_lambda
 
-/*
-//jacoco coverage
-def coverageSourceDirs = [
-        'src/main/java'
-]
-
-jacoco {
-    toolVersion = "0.7.6.201602180812"
-}
-
-//Can be made dependent on successfull mytest task (if desired)
-//task testReport(type: JacocoReport, dependsOn: "mytest") {
-
-task testReport(type: JacocoReport) {
-    String s = "${buildDir}"
-    //System.out.println("buildDir: " + s)
-
-    group = "Reporting"
-    description = "Generate Jacoco code coverage report after running tests."
-    reports {
-        xml.enabled true
-        html.enabled false
-        csv.enabled false
-        xml.destination "$buildDir/reports/jacoco/report.xml"
-    }
-
-    classDirectories = fileTree(dir: './build/classes/')
-    sourceDirectories = files(coverageSourceDirs)
-    executionData = files("${project.buildDir}/jacoco/simpleTests.exec")
-}
-
-task testReportAll(type: JacocoReport) {
-    String s = "${buildDir}"
-    //System.out.println("buildDir: " + s)
-
-    group = "Reporting"
-    description = "Generate Jacoco code coverage report after running tests."
-    reports {
-        xml.enabled true
-        html.enabled false
-        csv.enabled false
-        xml.destination "$buildDir/reports/jacoco/report.xml"
-    }
-
-    classDirectories = fileTree(dir: './build/classes/')
-    sourceDirectories = files(coverageSourceDirs)
-    executionData = files("${project.buildDir}/jacoco/mytest.exec")
-}
-
-* */
