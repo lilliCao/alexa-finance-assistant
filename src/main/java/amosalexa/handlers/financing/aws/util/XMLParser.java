@@ -1,6 +1,7 @@
 package amosalexa.handlers.financing.aws.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 
 public class XMLParser {
 
-    final static Logger log = Logger.getLogger(XMLParser.class);
+    final static Logger log = LoggerFactory.getLogger(XMLParser.class);
 
     public static String readValue(String xml, String[] path) {
 
