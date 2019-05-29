@@ -44,6 +44,7 @@ public class AmosStreamHandler extends SkillStreamHandler {
                         new FallbackIntentHandler(),
 
                         new VoicePinHandler(),
+                        new TanHandler(),
 
                         new BalanceLimitServiceHandler(),
                         new AccountInformationIntentHandler(),
