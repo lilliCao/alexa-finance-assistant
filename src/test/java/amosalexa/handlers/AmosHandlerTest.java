@@ -21,7 +21,6 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import static amosalexa.handlers.Utils.createIntentRequest;
 import static amosalexa.handlers.Utils.test;
 import static amosalexa.handlers.bankaccount.AccountInformationIntentHandler.*;
@@ -34,6 +33,10 @@ public class AmosHandlerTest {
     @Test
     public void testGetBalanceimitIntentHandler() {
         createIntentRequest(GET_BALANCE_LIMIT_INTENT);
+        test(new BalanceLimitServiceHandler(), "(.*)");
+        Map<String, Slot> slots=new HashMap<>();
+        slots.put("VoicePin", Slot.builder().withName("VoicePin").withValue("1111").build());
+        createIntentRequest(GET_BALANCE_LIMIT_INTENT, slots);
         test(new BalanceLimitServiceHandler(), "Dein aktuelles Kontolimit beträgt (.*) Euro.");
 
     }

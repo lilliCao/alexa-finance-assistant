@@ -50,7 +50,7 @@ public class BudgetReportServiceHandler implements IntentRequestHandler {
 
         boolean isSuccess = EMailClient.SendHTMLEMail(CARD_TITLE, body);
         responseDirective(input, "Ich sende gerade deinen Ausgabenreport. Bitte warte kurz.");
-        String answer = isSuccess? "Okay, ich habe dir deinen Ausgabenreport per E-Mail gesendet."
+        String answer = isSuccess ? "Okay, ich habe dir deinen Ausgabenreport per E-Mail gesendet."
                 : "Ein Fehler ist aufgetreten. Leider konnte der Ausgabenreport nicht gesendet werden.";
         return response(input, CARD_TITLE, answer);
     }

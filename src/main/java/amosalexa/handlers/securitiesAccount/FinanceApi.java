@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import configuration.ConfigurationAMOS;
 import model.banking.Security;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +49,7 @@ public class FinanceApi {
             return null;
         }
     }
+
     private static String getExchSymbolForIsin(Security security) {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
@@ -69,11 +69,11 @@ public class FinanceApi {
     public static String getStockPrice(Security security) {
         String exchCode = getExchSymbolForIsin(security);
 
-        if(exchCode!=null) {
+        if (exchCode != null) {
             JsonNode jsonNode = get(ConfigurationAMOS.stockPriceApiEndpoint
                     + "/query?function=GLOBAL_QUOTE&symbol=" + exchCode
                     + "&apikey=" + ConfigurationAMOS.stockPriceApiKey);
-            if(jsonNode!=null) {
+            if (jsonNode != null) {
                 return jsonNode.get("Global Quote").get("05. price").asText();
             }
         }

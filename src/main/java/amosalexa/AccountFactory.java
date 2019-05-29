@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static amosalexa.handlers.AmosStreamHandler.ACCOUNT_NUMBER;
 import static amosalexa.handlers.AmosStreamHandler.USER_ID;
 
 public class AccountFactory {
@@ -100,8 +99,8 @@ public class AccountFactory {
     }
 
     private void createTemplate() {
-        String number=account.getNumber();
-        dynamoDbMapper.save(new TransferTemplateDB("demo target 1", 10,number ));
+        String number = account.getNumber();
+        dynamoDbMapper.save(new TransferTemplateDB("demo target 1", 10, number));
         dynamoDbMapper.save(new TransferTemplateDB("demo target 2", 20, number));
         dynamoDbMapper.save(new TransferTemplateDB("demo target 3", 30, number));
         dynamoDbMapper.save(new TransferTemplateDB("demo target 4", 40, number));

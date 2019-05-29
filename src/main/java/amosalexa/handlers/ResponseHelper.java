@@ -3,12 +3,10 @@ package amosalexa.handlers;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.Response;
-import com.amazon.ask.model.Slot;
 import com.amazon.ask.model.services.directive.DirectiveServiceClient;
 import com.amazon.ask.model.services.directive.Header;
 import com.amazon.ask.model.services.directive.SendDirectiveRequest;
 import com.amazon.ask.model.services.directive.SpeakDirective;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;

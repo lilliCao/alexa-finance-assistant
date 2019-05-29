@@ -34,7 +34,7 @@ public class VoicePinHandler implements IntentRequestHandler {
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
         Intent intent = intentRequest.getIntent();
 
-        if(intent.getConfirmationStatus() == IntentConfirmationStatus.DENIED) {
+        if (intent.getConfirmationStatus() == IntentConfirmationStatus.DENIED) {
             return response(input, "Anfrage abbrechen");
         }
 

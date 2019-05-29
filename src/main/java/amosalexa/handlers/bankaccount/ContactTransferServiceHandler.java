@@ -52,8 +52,6 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
     private static final String SAVE_TRANSACTION_ID = "save_transaction_id";
 
     private static List<Contact> contacts;
-    private static HandlerInput inputReceived;
-    private static IntentRequest intentRequestReceived;
 
     @Override
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
@@ -65,27 +63,25 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        inputReceived = input;
-        intentRequestReceived = intentRequest;
-        switch (intentRequestReceived.getIntent().getName()) {
+        switch (intentRequest.getIntent().getName()) {
             case CONTACT_TRANSFER_INTENT:
-                switch (intentRequestReceived.getIntent().getConfirmationStatus()) {
+                switch (intentRequest.getIntent().getConfirmationStatus()) {
                     case NONE:
-                        return contactTransferAction();
+                        return contactTransferAction(input, intentRequest);
                     case CONFIRMED:
-                        return transfer();
+                        return transfer(input);
                     default:
-                        return response(inputReceived, CARD_TITLE);
+                        return response(input, CARD_TITLE);
                 }
             case CONTACT_CHOICE_INTENT:
-                return contactChoiceAction();
+                return contactChoiceAction(input, intentRequest);
             default:
                 //PLAIN_CATEGORY_INTENT:
-                return addCategory();
+                return addCategory(input, intentRequest);
         }
     }
 
-    private Optional<Response> addCategory() {
+    private Optional<Response> addCategory(HandlerInput inputReceived, IntentRequest intentRequestReceived) {
         if (intentRequestReceived.getIntent().getSlots().get(SLOT_CATEGORY) != null) {
             String categoryName = intentRequestReceived.getIntent().getSlots().get(SLOT_CATEGORY).getValue();
             List<Category> categories = dynamoDbMapper.loadAll(Category.class);
@@ -101,7 +97,7 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
         return response(inputReceived, CARD_TITLE, "Ich konnte die Kategorie nicht finden. Tschüss");
     }
 
-    private Optional<Response> contactChoiceAction() {
+    private Optional<Response> contactChoiceAction(HandlerInput inputReceived, IntentRequest intentRequestReceived) {
         int choice;
         try {
             choice = Integer.parseInt(intentRequestReceived.getIntent().getSlots().get(SLOT_CONTACT_INDEX).getValue());
@@ -120,7 +116,7 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
         }
     }
 
-    private Optional<Response> contactTransferAction() {
+    private Optional<Response> contactTransferAction(HandlerInput inputReceived, IntentRequest intentRequestReceived) {
         Map<String, Slot> slots = intentRequestReceived.getIntent().getSlots();
         String name = slots.get(SLOT_CONTACT).getValue().toLowerCase();
 
@@ -151,6 +147,7 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
                         .append(". ");
                 i++;
             }
+            contactListString.append("Sage zum Beispiel Kontakt Nummer drei oder Nummer drei");
             contacts = contactsFound;
             return responseDelegate(inputReceived, CARD_TITLE, contactListString.toString(),
                     Intent.builder().withName(CONTACT_CHOICE_INTENT).build());
@@ -171,7 +168,7 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
         return responseWithIntentConfirm(input, CARD_TITLE, speechText, intent);
     }
 
-    private Optional<Response> transfer() {
+    private Optional<Response> transfer(HandlerInput inputReceived) {
         Map<String, Object> sessionAttributes = inputReceived.getAttributesManager().getSessionAttributes();
         String name = (String) sessionAttributes.get(SAVE_NAME);
         String iban = (String) sessionAttributes.get(SAVE_IBAN);

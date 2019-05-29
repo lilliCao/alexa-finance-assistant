@@ -56,8 +56,8 @@ public class SecuritiesAccountInformationServiceHandler implements IntentRequest
                 if (i < securities.size()) {
                     Security security = securities.get(i);
                     String stockPrice = FinanceApi.getStockPrice(security);
-                    String stockPriceText = stockPrice==null ? " leider keine aktuelle Preise vorhanden. "
-                            : "mit einem momentanen Wert von "+stockPrice+" Euro.";
+                    String stockPriceText = stockPrice == null ? " leider keine aktuelle Preise vorhanden. "
+                            : "mit einem momentanen Wert von " + stockPrice + " Euro.";
                     builder.append("Wertpapier Nummer ")
                             .append(security.getSecurityId())
                             .append(": ").append(security.getDescription())
@@ -80,8 +80,8 @@ public class SecuritiesAccountInformationServiceHandler implements IntentRequest
             StringBuilder builder = new StringBuilder();
             Security security = securities.get(position);
             String stockPrice = FinanceApi.getStockPrice(security);
-            String stockPriceText = stockPrice==null ? " leider keine aktuelle Preise vorhanden. "
-                    : "mit einem momentanen Wert von "+stockPrice+" Euro.";
+            String stockPriceText = stockPrice == null ? " leider keine aktuelle Preise vorhanden. "
+                    : "mit einem momentanen Wert von " + stockPrice + " Euro.";
             builder.append("Wertpapier Nummer ")
                     .append(security.getSecurityId())
                     .append(": ").append(security.getDescription())

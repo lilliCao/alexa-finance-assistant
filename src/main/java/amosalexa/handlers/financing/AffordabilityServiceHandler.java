@@ -57,7 +57,7 @@ public class AffordabilityServiceHandler implements IntentRequestHandler {
             // show product selection
             //items = AWSLookup.itemSearch(keyword, 1, null);
 
-            responseDirective(input, "Ich suche jetzt nach dem "+keyword+" .Bitte warte kurz.");
+            responseDirective(input, "Ich suche jetzt nach dem " + keyword + " .Bitte warte kurz.");
             // TODO demo item for test alexa because Amazon Advertising API not work yet
             Item item1 = new Item();
             Item item2 = new Item();

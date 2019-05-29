@@ -5,8 +5,6 @@ import api.banking.AccountAPI;
 import model.banking.Account;
 import model.banking.StandingOrder;
 import model.db.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
