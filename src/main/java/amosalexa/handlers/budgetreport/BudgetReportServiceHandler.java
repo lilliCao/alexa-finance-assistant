@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.dynamoDbMapper;
+import static amosalexa.handlers.PasswordResponseHelper.checkPin;
+import static amosalexa.handlers.PasswordResponseHelper.isNumberIntentForPass;
 import static amosalexa.handlers.ResponseHelper.response;
 import static amosalexa.handlers.ResponseHelper.responseDirective;
 
@@ -31,11 +33,15 @@ public class BudgetReportServiceHandler implements IntentRequestHandler {
 
     @Override
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
-        return input.matches(Predicates.intentName(BUDGET_REPORT_EMAIL_INTENT));
+        return input.matches(Predicates.intentName(BUDGET_REPORT_EMAIL_INTENT))
+                || isNumberIntentForPass(input, BUDGET_REPORT_EMAIL_INTENT);
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
+        Optional<Response> response = checkPin(input, intentRequest, false);
+        if (response.isPresent()) return response;
+
         // Load the mail template from resources
         JtwigTemplate template = JtwigTemplate.classpathTemplate("html-templates/budget-report.twig");
         List<BudgetReportCategory> categories = new ArrayList<>();

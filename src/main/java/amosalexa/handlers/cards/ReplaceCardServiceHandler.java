@@ -4,10 +4,7 @@ import amosalexa.handlers.Service;
 import api.banking.AccountAPI;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
-import com.amazon.ask.model.IntentConfirmationStatus;
-import com.amazon.ask.model.IntentRequest;
-import com.amazon.ask.model.Response;
-import com.amazon.ask.model.Slot;
+import com.amazon.ask.model.*;
 import com.amazon.ask.request.Predicates;
 import model.banking.Card;
 
@@ -16,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.ACCOUNT_NUMBER;
+import static amosalexa.handlers.PasswordResponseHelper.*;
 import static amosalexa.handlers.ResponseHelper.response;
 
 @Service(
@@ -31,12 +29,17 @@ public class ReplaceCardServiceHandler implements IntentRequestHandler {
 
     @Override
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
-        return input.matches(Predicates.intentName(REPLACEMENT_CARD_INTENT));
+        return input.matches(Predicates.intentName(REPLACEMENT_CARD_INTENT))
+                || isNumberIntentForPass(input, REPLACEMENT_CARD_INTENT);
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
+        Optional<Response> response = checkPin(input, intentRequest, false);
+        if (response.isPresent()) return response;
+        Intent intent = getRealIntent(input, intentRequest);
+
+        if (intent.getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
             Map<String, Slot> slots = intentRequest.getIntent().getSlots();
             String cardEndZiffer = slots.get(SLOT_CARD_ENDZIFFER).getValue();
 

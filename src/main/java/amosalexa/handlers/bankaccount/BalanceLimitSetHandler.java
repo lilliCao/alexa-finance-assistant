@@ -4,7 +4,6 @@ import amosalexa.handlers.Service;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
 import com.amazon.ask.model.Intent;
-import com.amazon.ask.model.IntentConfirmationStatus;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.request.Predicates;
@@ -36,9 +35,6 @@ public class BalanceLimitSetHandler implements IntentRequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.DENIED) {
-            return response(input, CARD_TITLE);
-        }
         Optional<Response> response = checkPin(input, intentRequest, false);
         if (response.isPresent()) return response;
 

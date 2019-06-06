@@ -1,4 +1,4 @@
-package amosalexa.handlers.bankcontact;
+package amosalexa.handlers.bankcontact_not_work;
 
 
 import com.amazon.ask.model.services.deviceAddress.Address;

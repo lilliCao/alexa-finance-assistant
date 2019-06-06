@@ -4,6 +4,7 @@ import amosalexa.handlers.Service;
 import api.aws.DynamoDbMapper;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
+import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentConfirmationStatus;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.dynamoDbMapper;
+import static amosalexa.handlers.PasswordResponseHelper.*;
 import static amosalexa.handlers.ResponseHelper.response;
 import static amosalexa.handlers.ResponseHelper.responseWithIntentConfirm;
 
@@ -35,44 +37,42 @@ public class EditCategoriesServiceHandler implements IntentRequestHandler {
     private static final String SAVE_CATEGORY_ID = "save_category_id";
     private static final String SAVE_CATEGORY_NAME = "save_category_name";
 
-    private static HandlerInput inputR;
-    private static IntentRequest intentRequestR;
 
     @Override
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
         return input.matches(Predicates.intentName(ADD_CATEGORY_INTENT))
                 || input.matches(Predicates.intentName(SHOW_CATEGORIES_INTENT))
-                || input.matches(Predicates.intentName(DELETE_CATEGORY_INTENT));
+                || input.matches(Predicates.intentName(DELETE_CATEGORY_INTENT))
+                || isNumberIntentForPass(input, ADD_CATEGORY_INTENT, SHOW_CATEGORIES_INTENT, DELETE_CATEGORY_INTENT);
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        inputR = input;
-        intentRequestR = intentRequest;
-        switch (intentRequestR.getIntent().getName()) {
+        Optional<Response> response = checkPin(input, intentRequest, false);
+        if (response.isPresent()) return response;
+        Intent intent = getRealIntent(input, intentRequest);
+
+        switch (intent.getName()) {
             case SHOW_CATEGORIES_INTENT:
-                return showCategories();
+                return showCategories(input);
             case ADD_CATEGORY_INTENT:
-                if (intentRequestR.getIntent().getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
-                    return addCategory();
-                } else {
-                    return response(inputR, CARD_TITLE);
+                if (intent.getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
+                    return addCategory(intent, input);
                 }
             default:
                 //DELETE_CATEGORY_INTENT
-                switch (intentRequestR.getIntent().getConfirmationStatus()) {
+                switch (intent.getConfirmationStatus()) {
                     case NONE:
-                        return askDelete();
-                    case CONFIRMED:
-                        return deleteCategory();
+                        return askDelete(intent, input);
                     default:
-                        return response(inputR, CARD_TITLE);
+                        //CONFIRMED
+                        return deleteCategory(input);
                 }
         }
     }
 
-    private Optional<Response> askDelete() {
-        String category = intentRequestR.getIntent().getSlots().get(SLOT_CATEGORY_NAME).getValue();
+    private Optional<Response> askDelete(Intent intent, HandlerInput inputR) {
+        String category = intent.getSlots().get(SLOT_CATEGORY_NAME).getValue();
         List<Category> categories = DynamoDbMapper.getInstance().loadAll(Category.class);
 
         int closestDist = Integer.MAX_VALUE;
@@ -99,10 +99,10 @@ public class EditCategoriesServiceHandler implements IntentRequestHandler {
                 + closestCategory.getName()
                 + "' und dem Limit von "
                 + closestCategory.getLimit()
-                + " Euro wirklich löschen?", intentRequestR.getIntent());
+                + " Euro wirklich löschen?", intent);
     }
 
-    private Optional<Response> deleteCategory() {
+    private Optional<Response> deleteCategory(HandlerInput inputR) {
         Map<String, Object> sessionAttributes = inputR.getAttributesManager().getSessionAttributes();
         String id = (String) sessionAttributes.get(SAVE_CATEGORY_ID);
         String name = (String) sessionAttributes.get(SAVE_CATEGORY_NAME);
@@ -111,8 +111,8 @@ public class EditCategoriesServiceHandler implements IntentRequestHandler {
     }
 
 
-    private Optional<Response> addCategory() {
-        String categoryName = intentRequestR.getIntent().getSlots().get("CategoryName").getValue();
+    private Optional<Response> addCategory(Intent intent, HandlerInput inputR) {
+        String categoryName = intent.getSlots().get("CategoryName").getValue();
 
         List<Category> items = DynamoDbMapper.getInstance().loadAll(Category.class);
         categoryName = categoryName.toLowerCase();
@@ -127,7 +127,7 @@ public class EditCategoriesServiceHandler implements IntentRequestHandler {
         return response(inputR, CARD_TITLE, "Verstanden. Die Kategorie " + categoryName + " wurde erstellt.");
     }
 
-    private Optional<Response> showCategories() {
+    private Optional<Response> showCategories(HandlerInput inputR) {
 
         List<Category> items = dynamoDbMapper.loadAll(Category.class);
         String namesOfCategories = "";

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.dynamoDbMapper;
+import static amosalexa.handlers.PasswordResponseHelper.*;
 import static amosalexa.handlers.ResponseHelper.response;
 import static amosalexa.handlers.ResponseHelper.responseWithSlotConfirm;
 
@@ -38,32 +39,38 @@ public class TransferTemplateServiceHandler implements IntentRequestHandler {
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
         return input.matches(Predicates.intentName(LIST_TRANSFER_TEMPLATES_INTENT))
                 || input.matches(Predicates.intentName(DELETE_TRANSFER_TEMPLATES_INTENT))
-                || input.matches(Predicates.intentName(EDIT_TRANSFER_TEMPLATE_INTENT));
+                || input.matches(Predicates.intentName(EDIT_TRANSFER_TEMPLATE_INTENT))
+                || isNumberIntentForPass(input,
+                LIST_TRANSFER_TEMPLATES_INTENT, DELETE_TRANSFER_TEMPLATES_INTENT, EDIT_TRANSFER_TEMPLATE_INTENT);
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        switch (intentRequest.getIntent().getName()) {
+        Optional<Response> response = checkPin(input, intentRequest, false);
+        if (response.isPresent()) return response;
+        Intent intent = getRealIntent(input, intentRequest);
+
+        switch (intent.getName()) {
             case LIST_TRANSFER_TEMPLATES_INTENT:
-                return getTemplates(input, intentRequest);
+                return getTemplates(input, intent);
             case DELETE_TRANSFER_TEMPLATES_INTENT:
-                if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
-                    return deleteTemplate(input, intentRequest);
+                if (intent.getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
+                    return deleteTemplate(input, intent);
                 } else {
                     return response(input, CARD_TITLE);
                 }
             default:
                 //EDIT_TRANSFER_TEMPLATE_INTENT
-                if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
-                    return editTemplate(input, intentRequest);
+                if (intent.getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
+                    return editTemplate(input, intent);
                 } else {
                     return response(input, CARD_TITLE);
                 }
         }
     }
 
-    private Optional<Response> editTemplate(HandlerInput input, IntentRequest intentRequest) {
-        Map<String, Slot> slots = intentRequest.getIntent().getSlots();
+    private Optional<Response> editTemplate(HandlerInput input, Intent intent) {
+        Map<String, Slot> slots = intent.getSlots();
         int templatId = Integer.valueOf(slots.get(SLOT_TEMPLATE_ID).getValue());
         double amount = Double.valueOf(slots.get(SLOT_NEW_AMOUNT).getValue());
 
@@ -78,8 +85,8 @@ public class TransferTemplateServiceHandler implements IntentRequestHandler {
         return response(input, CARD_TITLE, "Ich habe deine angegebene Vorlage id nicht gefunden.");
     }
 
-    private Optional<Response> deleteTemplate(HandlerInput input, IntentRequest intentRequest) {
-        int templatId = Integer.valueOf(intentRequest.getIntent().getSlots().get(SLOT_TEMPLATE_ID).getValue());
+    private Optional<Response> deleteTemplate(HandlerInput input, Intent intent) {
+        int templatId = Integer.valueOf(intent.getSlots().get(SLOT_TEMPLATE_ID).getValue());
         ArrayList<TransferTemplateDB> templates = new ArrayList<>(dynamoDbMapper.loadAll(TransferTemplateDB.class));
         for (TransferTemplateDB template : templates) {
             if (template.getId() == templatId) {
@@ -90,8 +97,8 @@ public class TransferTemplateServiceHandler implements IntentRequestHandler {
         return response(input, CARD_TITLE, "Ich habe deine angegebene Vorlage id nicht gefunden.");
     }
 
-    private Optional<Response> getTemplates(HandlerInput input, IntentRequest intentRequest) {
-        Slot nextIndex = intentRequest.getIntent().getSlots().get(SLOT_NEXT_INDEX);
+    private Optional<Response> getTemplates(HandlerInput input, Intent intent) {
+        Slot nextIndex = intent.getSlots().get(SLOT_NEXT_INDEX);
         ArrayList<TransferTemplateDB> templates = new ArrayList<>(dynamoDbMapper.loadAll(TransferTemplateDB.class));
         if (templates == null || templates.size() == 0) {
             return response(input, CARD_TITLE, "Keine Vorlagen vorhanden.");
@@ -112,9 +119,9 @@ public class TransferTemplateServiceHandler implements IntentRequestHandler {
             }
             if (templates.size() > TEMPLATE_LIMIT) {
                 builder.append("Moechtest du einen weiteren Vorlage hoeren?");
-                intentRequest.getIntent().getSlots().put(SLOT_NEXT_INDEX, Slot.builder().withValue(String.valueOf(TEMPLATE_LIMIT))
+                intent.getSlots().put(SLOT_NEXT_INDEX, Slot.builder().withValue(String.valueOf(TEMPLATE_LIMIT))
                         .withName(SLOT_NEXT_INDEX).build());
-                return responseWithSlotConfirm(input, CARD_TITLE, builder.toString(), intentRequest.getIntent(), SLOT_NEXT_INDEX);
+                return responseWithSlotConfirm(input, CARD_TITLE, builder.toString(), intent, SLOT_NEXT_INDEX);
             } else {
                 return response(input, CARD_TITLE, builder.toString());
             }
@@ -131,9 +138,9 @@ public class TransferTemplateServiceHandler implements IntentRequestHandler {
             position++;
             if (position < templates.size()) {
                 builder.append("Moechtest du einen weiteren Vorlage hoeren?");
-                intentRequest.getIntent().getSlots().put(SLOT_NEXT_INDEX, Slot.builder().withValue(String.valueOf(position))
+                intent.getSlots().put(SLOT_NEXT_INDEX, Slot.builder().withValue(String.valueOf(position))
                         .withName(SLOT_NEXT_INDEX).build());
-                return responseWithSlotConfirm(input, CARD_TITLE, builder.toString(), intentRequest.getIntent(), SLOT_NEXT_INDEX);
+                return responseWithSlotConfirm(input, CARD_TITLE, builder.toString(), intent, SLOT_NEXT_INDEX);
             } else {
                 return response(input, CARD_TITLE, builder.toString());
             }

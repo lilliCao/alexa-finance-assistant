@@ -1,10 +1,7 @@
 package amosalexa.handlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
-import com.amazon.ask.model.Intent;
-import com.amazon.ask.model.IntentRequest;
-import com.amazon.ask.model.Response;
-import com.amazon.ask.model.Slot;
+import com.amazon.ask.model.*;
 import com.amazon.ask.model.slu.entityresolution.StatusCode;
 import com.amazon.ask.request.Predicates;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,17 +54,31 @@ public class PasswordResponseHelper {
         }
     }
 
-    public static boolean isNumberIntentForPass(HandlerInput input, String name) {
+    public static boolean isNumberIntentForPass(HandlerInput input, String... names) {
+        if (!input.matches(Predicates.intentName(NUMBER_INTENT))) return false;
+        LOGGER.info("check if intent should check password");
         String state = (String) input.getAttributesManager().getSessionAttributes().get(STATE);
         String intentName = (String) input.getAttributesManager().getSessionAttributes().get(INTENT_NAME);
+        boolean matchedIntent = false;
+        for (String name : names) {
+            if (intentName.equalsIgnoreCase(name)) {
+                matchedIntent = true;
+                break;
+            }
+        }
+        LOGGER.info("Matched intent = " + intentName + " " + matchedIntent);
         return input.matches(Predicates.intentName(NUMBER_INTENT))
-                && intentName.equalsIgnoreCase(name)
+                && matchedIntent
                 && (state.equals(CHECKPIN_START) ||
                 state.equals(CHECKTAN_START));
     }
 
 
     public static Optional<Response> checkPin(HandlerInput input, IntentRequest intentRequest, boolean needTan) {
+        if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.DENIED) {
+            return response(input, "Anfrage abbrechen");
+        }
+
         Map<String, Object> sessionAttributes = input.getAttributesManager().getSessionAttributes();
         if (!sessionAttributes.containsKey(STATE)) {
             LOGGER.info("Ask for pin");

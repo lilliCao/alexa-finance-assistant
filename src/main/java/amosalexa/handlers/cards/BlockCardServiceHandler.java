@@ -10,6 +10,8 @@ import com.amazon.ask.request.Predicates;
 
 import java.util.Optional;
 
+import static amosalexa.handlers.PasswordResponseHelper.checkPin;
+import static amosalexa.handlers.PasswordResponseHelper.isNumberIntentForPass;
 import static amosalexa.handlers.ResponseHelper.response;
 
 @Service(
@@ -25,11 +27,15 @@ public class BlockCardServiceHandler implements IntentRequestHandler {
 
     @Override
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
-        return input.matches(Predicates.intentName(BLOCK_CARD_INTENT));
+        return input.matches(Predicates.intentName(BLOCK_CARD_INTENT))
+                || isNumberIntentForPass(input, BLOCK_CARD_INTENT);
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
+        Optional<Response> response = checkPin(input, intentRequest, false);
+        if (response.isPresent()) return response;
+
         if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
             String bankCardNumber = intentRequest.getIntent().getSlots().get(SLOT_BANK_CARD_NUMMER).getValue();
             // TODO: Lock card with number cardNumber

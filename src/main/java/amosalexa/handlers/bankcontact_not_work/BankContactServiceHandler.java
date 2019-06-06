@@ -1,4 +1,4 @@
-package amosalexa.handlers.bankcontact;
+package amosalexa.handlers.bankcontact_not_work;
 
 import amosalexa.handlers.Service;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.BANK_NAME;
 import static amosalexa.handlers.ResponseHelper.response;
-import static amosalexa.handlers.bankcontact.PlaceFinder.*;
+import static amosalexa.handlers.bankcontact_not_work.PlaceFinder.*;
 
 @Service(
         functionGroup = Service.FunctionGroup.BANK_CONTACT,

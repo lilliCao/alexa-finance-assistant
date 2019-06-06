@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.ACCOUNT_NUMBER;
 import static amosalexa.handlers.AmosStreamHandler.dynamoDbMapper;
+import static amosalexa.handlers.PasswordResponseHelper.*;
 import static amosalexa.handlers.ResponseHelper.*;
 
 @Service(
@@ -44,18 +45,23 @@ public class ContactServiceHandler implements IntentRequestHandler {
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
         return input.matches(Predicates.intentName(CONTACT_LIST_INFO_INTENT))
                 || input.matches(Predicates.intentName(CONTACT_ADD_INTENT))
-                || input.matches(Predicates.intentName(CONTACT_DELETE_INTENT));
+                || input.matches(Predicates.intentName(CONTACT_DELETE_INTENT))
+                || isNumberIntentForPass(input, CONTACT_LIST_INFO_INTENT, CONTACT_ADD_INTENT, CONTACT_DELETE_INTENT);
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        switch (intentRequest.getIntent().getName()) {
+        Optional<Response> response = checkPin(input, intentRequest, false);
+        if (response.isPresent()) return response;
+        Intent intent = getRealIntent(input, intentRequest);
+
+        switch (intent.getName()) {
             case CONTACT_LIST_INFO_INTENT:
-                return getContactList(input, intentRequest);
+                return getContactList(input, intent);
             case CONTACT_ADD_INTENT:
-                switch (intentRequest.getIntent().getConfirmationStatus()) {
+                switch (intent.getConfirmationStatus()) {
                     case NONE:
-                        return checkTransaction(input, intentRequest);
+                        return checkTransaction(input, intent);
                     case CONFIRMED:
                         return addNewContact(input);
                     default:
@@ -63,8 +69,8 @@ public class ContactServiceHandler implements IntentRequestHandler {
                 }
             default:
                 //CONTACT_DELETE
-                if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
-                    return deleteContact(input, intentRequest);
+                if (intent.getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
+                    return deleteContact(input, intent);
                 } else {
                     return response(input, CARD_TITLE);
                 }
@@ -80,8 +86,8 @@ public class ContactServiceHandler implements IntentRequestHandler {
         return response(input, CARD_TITLE, "Okay! Der Kontakt " + contactName + " wurde angelegt.");
     }
 
-    private Optional<Response> checkTransaction(HandlerInput input, IntentRequest intentRequest) {
-        Number id = Integer.valueOf(intentRequest.getIntent().getSlots().get(SLOT_TRANSACTION_NUMBER).getValue());
+    private Optional<Response> checkTransaction(HandlerInput input, Intent intent) {
+        Number id = Integer.valueOf(intent.getSlots().get(SLOT_TRANSACTION_NUMBER).getValue());
         List<Transaction> allTransactions = TransactionAPI.getTransactionsForAccount(ACCOUNT_NUMBER);
         for (Transaction transaction : allTransactions) {
             if (id.equals(transaction.getTransactionId())) {
@@ -105,7 +111,7 @@ public class ContactServiceHandler implements IntentRequestHandler {
                     sessionAttributes.put(SAVE_CONTACT_NAME, name);
                     sessionAttributes.put(SAVE_IBAN, iban);
                     input.getAttributesManager().setSessionAttributes(sessionAttributes);
-                    return responseWithIntentConfirm(input, CARD_TITLE, speechText, intentRequest.getIntent());
+                    return responseWithIntentConfirm(input, CARD_TITLE, speechText, intent);
                 }
             }
         }
@@ -113,15 +119,15 @@ public class ContactServiceHandler implements IntentRequestHandler {
         return response(input, CARD_TITLE, "Ich habe keine Transaktion mit dieser Nummer gefunden. Bitte wiederhole deine Eingabe.");
     }
 
-    private Optional<Response> deleteContact(HandlerInput input, IntentRequest intentRequest) {
-        int id = Integer.valueOf(intentRequest.getIntent().getSlots().get(SLOT_CONTACT_ID).getValue());
+    private Optional<Response> deleteContact(HandlerInput input, Intent intent) {
+        int id = Integer.valueOf(intent.getSlots().get(SLOT_CONTACT_ID).getValue());
         Contact contact = new Contact(id);
         dynamoDbMapper.delete(contact);
         return response(input, CARD_TITLE, "Kontakt wurde geloescht.");
     }
 
-    private Optional<Response> getContactList(HandlerInput input, IntentRequest intentRequest) {
-        Slot nextIndex = intentRequest.getIntent().getSlots().get(SLOT_NEXT_INDEX);
+    private Optional<Response> getContactList(HandlerInput input, Intent intent) {
+        Slot nextIndex = intent.getSlots().get(SLOT_NEXT_INDEX);
         List<Contact> contacts = new ArrayList<>(dynamoDbMapper.loadAll(Contact.class));
         if (contacts == null || contacts.size() == 0) {
             return response(input, CARD_TITLE, "Du hast keine Kontakte in deiner Kontaktliste.");
@@ -140,9 +146,9 @@ public class ContactServiceHandler implements IntentRequestHandler {
             }
             if (contacts.size() > CONTACT_LIMIT) {
                 builder.append("Willst du noch weitere Kontakte hören?");
-                intentRequest.getIntent().getSlots().put(SLOT_NEXT_INDEX, Slot.builder().withValue(String.valueOf(CONTACT_LIMIT))
+                intent.getSlots().put(SLOT_NEXT_INDEX, Slot.builder().withValue(String.valueOf(CONTACT_LIMIT))
                         .withName(SLOT_NEXT_INDEX).build());
-                return responseWithSlotConfirm(input, CARD_TITLE, builder.toString(), intentRequest.getIntent(), SLOT_NEXT_INDEX);
+                return responseWithSlotConfirm(input, CARD_TITLE, builder.toString(), intent, SLOT_NEXT_INDEX);
             } else {
                 return response(input, CARD_TITLE, builder.toString());
             }
@@ -157,9 +163,9 @@ public class ContactServiceHandler implements IntentRequestHandler {
             position++;
             if (position < contacts.size()) {
                 builder.append("Willst du noch weitere Kontakte hören?");
-                intentRequest.getIntent().getSlots().put(SLOT_NEXT_INDEX, Slot.builder().withValue(String.valueOf(position))
+                intent.getSlots().put(SLOT_NEXT_INDEX, Slot.builder().withValue(String.valueOf(position))
                         .withName(SLOT_NEXT_INDEX).build());
-                return responseWithSlotConfirm(input, CARD_TITLE, builder.toString(), intentRequest.getIntent(), SLOT_NEXT_INDEX);
+                return responseWithSlotConfirm(input, CARD_TITLE, builder.toString(), intent, SLOT_NEXT_INDEX);
             } else {
                 return response(input, CARD_TITLE, builder.toString());
             }

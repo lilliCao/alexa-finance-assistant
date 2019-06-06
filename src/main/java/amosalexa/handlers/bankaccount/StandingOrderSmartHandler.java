@@ -3,7 +3,10 @@ package amosalexa.handlers.bankaccount;
 import api.banking.AccountAPI;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
-import com.amazon.ask.model.*;
+import com.amazon.ask.model.Intent;
+import com.amazon.ask.model.IntentRequest;
+import com.amazon.ask.model.Response;
+import com.amazon.ask.model.Slot;
 import com.amazon.ask.request.Predicates;
 import model.banking.StandingOrder;
 import model.db.Contact;
@@ -36,10 +39,6 @@ public class StandingOrderSmartHandler implements IntentRequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.DENIED) {
-            return response(input, CARD_TITLE);
-        }
-
         Optional<Response> response = checkPin(input, intentRequest, true);
         if (response.isPresent()) return response;
 

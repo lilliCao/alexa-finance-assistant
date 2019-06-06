@@ -113,6 +113,7 @@ AddCategoryIntent
 erstelle die Kategorie {CategoryName}
 fuege die Kategorie {CategoryName} hinzu
 
+
 CategoryStatusInfoIntent
 Wie ist der Status für Kategorie {Category}
 Wie ist der Status für {Category}

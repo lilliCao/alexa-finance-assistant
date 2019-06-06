@@ -31,10 +31,6 @@ public class StandingOrderModifyHandler implements IntentRequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        if (intentRequest.getIntent().getConfirmationStatus() == IntentConfirmationStatus.DENIED) {
-            return response(input, CARD_TITLE);
-        }
-
         Optional<Response> response = checkPin(input, intentRequest, true);
         if (response.isPresent()) return response;
 

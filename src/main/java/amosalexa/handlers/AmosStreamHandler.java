@@ -2,7 +2,7 @@ package amosalexa.handlers;
 
 import amosalexa.AccountFactory;
 import amosalexa.handlers.bankaccount.*;
-import amosalexa.handlers.bankcontact.BankContactServiceHandler;
+import amosalexa.handlers.bankcontact_not_work.BankContactServiceHandler;
 import amosalexa.handlers.budgetreport.BudgetReportServiceHandler;
 import amosalexa.handlers.budgettracker.BudgetTrackerServiceHandler;
 import amosalexa.handlers.budgettracker.EditCategoriesServiceHandler;

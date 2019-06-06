@@ -4,10 +4,7 @@ package amosalexa.handlers.budgettracker;
 import amosalexa.handlers.Service;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.IntentRequestHandler;
-import com.amazon.ask.model.IntentConfirmationStatus;
-import com.amazon.ask.model.IntentRequest;
-import com.amazon.ask.model.Response;
-import com.amazon.ask.model.Slot;
+import com.amazon.ask.model.*;
 import com.amazon.ask.request.Predicates;
 import model.db.Category;
 
@@ -17,6 +14,7 @@ import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.ACCOUNT_NUMBER;
 import static amosalexa.handlers.AmosStreamHandler.dynamoDbMapper;
+import static amosalexa.handlers.PasswordResponseHelper.*;
 import static amosalexa.handlers.ResponseHelper.response;
 import static amosalexa.handlers.ResponseHelper.responseWithIntentConfirm;
 
@@ -41,47 +39,46 @@ public class BudgetTrackerServiceHandler implements IntentRequestHandler {
     private static final String SAVE_AMOUNT = "save_amount";
     private static final String SAVE_CATEGORY = "save_category";
 
-    private static HandlerInput inputR;
-    private static IntentRequest intentRequestR;
 
     @Override
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
         return input.matches(Predicates.intentName(CATEGORY_LIMIT_INFO_INTENT))
                 || (input.matches(Predicates.intentName(CATEGORY_LIMIT_SET_INTENT)))
                 || input.matches(Predicates.intentName(CATEGORY_STATUS_INFO_INTENT))
-                || input.matches(Predicates.intentName(CATEGORY_SPENDING_INTENT));
+                || input.matches(Predicates.intentName(CATEGORY_SPENDING_INTENT))
+                || isNumberIntentForPass(input, CATEGORY_LIMIT_INFO_INTENT, CATEGORY_LIMIT_SET_INTENT,
+                CATEGORY_STATUS_INFO_INTENT, CATEGORY_SPENDING_INTENT);
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        inputR = input;
-        intentRequestR = intentRequest;
-        switch (intentRequestR.getIntent().getName()) {
+        Optional<Response> response = checkPin(input, intentRequest, false);
+        if (response.isPresent()) return response;
+
+        Intent intent = getRealIntent(input, intentRequest);
+        switch (intent.getName()) {
             case CATEGORY_LIMIT_INFO_INTENT:
-                return getCategoryLimitInfo();
+                return getCategoryLimitInfo(intent, input);
             case CATEGORY_LIMIT_SET_INTENT:
-                if (intentRequestR.getIntent().getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
-                    return setCategoryLimit();
-                } else {
-                    return response(inputR, CARD_TITLE);
+                if (intent.getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
+                    return setCategoryLimit(intent, input);
                 }
             case CATEGORY_STATUS_INFO_INTENT:
-                return getCategoryStatusInfo();
+                return getCategoryStatusInfo(intent, input);
             default:
                 //CATEGORY_SPENDING_INTENT:
-                if (intentRequestR.getIntent().getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
-                    if (inputR.getAttributesManager().getSessionAttributes().containsKey(SAVE_CATEGORY)) {
-                        return createNewSpending();
+                if (intent.getConfirmationStatus() == IntentConfirmationStatus.CONFIRMED) {
+                    if (input.getAttributesManager().getSessionAttributes().containsKey(SAVE_CATEGORY)) {
+                        return createNewSpending(input);
                     } else {
-                        return setSpending();
+                        return setSpending(intent, input);
                     }
-                } else {
-                    return response(inputR, CARD_TITLE);
                 }
         }
+        return Optional.empty();
     }
 
-    private Optional<Response> createNewSpending() {
+    private Optional<Response> createNewSpending(HandlerInput inputR) {
         Map<String, Object> sessionAttributes = inputR.getAttributesManager().getSessionAttributes();
         String categoryName = (String) sessionAttributes.get(SAVE_CATEGORY);
         double amount = (Double) sessionAttributes.get(SAVE_AMOUNT);
@@ -90,8 +87,8 @@ public class BudgetTrackerServiceHandler implements IntentRequestHandler {
         return response(inputR, CARD_TITLE, "Ich habe die Kategorie " + categoryName + " erstellt und " + amount + " Euro ");
     }
 
-    private Optional<Response> setSpending() {
-        Map<String, Slot> slots = intentRequestR.getIntent().getSlots();
+    private Optional<Response> setSpending(Intent intent, HandlerInput inputR) {
+        Map<String, Slot> slots = intent.getSlots();
         String categoryName = slots.get(SLOT_CATEGORY).getValue();
         double amount = Double.valueOf(slots.get(SLOT_AMOUNT).getValue());
         List<Category> categories = dynamoDbMapper.loadAll(Category.class);
@@ -126,18 +123,20 @@ public class BudgetTrackerServiceHandler implements IntentRequestHandler {
         sessionAttributes.put(SAVE_AMOUNT, amount);
         sessionAttributes.put(SAVE_CATEGORY, categoryName);
         inputR.getAttributesManager().setSessionAttributes(sessionAttributes);
-        return responseWithIntentConfirm(inputR, CARD_TITLE, speech, intentRequestR.getIntent());
+        return responseWithIntentConfirm(inputR, CARD_TITLE, speech, intent);
     }
 
-    private Optional<Response> getCategoryStatusInfo() {
-        String categoryName = intentRequestR.getIntent().getSlots()
+    private Optional<Response> getCategoryStatusInfo(Intent intent, HandlerInput inputR) {
+        String categoryName = intent.getSlots()
                 .get(SLOT_CATEGORY).getValue();
         List<Category> categories = dynamoDbMapper.loadAll(Category.class);
         for (Category cate : categories) {
             if (cate.getName().equalsIgnoreCase(categoryName)) {
                 String speechText = "Du hast bereits " + cate.getSpendingPercentage() + "% des Limits von " + cate.getLimit() + " Euro fuer" +
                         " die Kategorie " + cate.getName() + " ausgegeben. " +
-                        "Du kannst noch " + (cate.getLimit() - cate.getSpending()) + " Euro für diese Kategorie ausgeben.";
+                        ((cate.getLimit() - cate.getSpending()) > 0 ?
+                                ("Du kannst noch " + (cate.getLimit() - cate.getSpending()) + " Euro für diese Kategorie ausgeben.")
+                                : ("Du sollst nicht mehr für diese Kategorie ausgeben"));
                 return response(inputR, CARD_TITLE, speechText);
             }
         }
@@ -145,8 +144,8 @@ public class BudgetTrackerServiceHandler implements IntentRequestHandler {
                 " erhalte Information zu den verfuegbaren Kategorien.");
     }
 
-    private Optional<Response> setCategoryLimit() {
-        Map<String, Slot> slots = intentRequestR.getIntent().getSlots();
+    private Optional<Response> setCategoryLimit(Intent intent, HandlerInput inputR) {
+        Map<String, Slot> slots = intent.getSlots();
         String categoryName = slots.get(SLOT_CATEGORY).getValue();
         double amount = Double.valueOf(slots.get(SLOT_CATEGORY_LIMIT).getValue());
 
@@ -154,18 +153,18 @@ public class BudgetTrackerServiceHandler implements IntentRequestHandler {
         for (Category cate : categories) {
             if (cate.getName().equalsIgnoreCase(categoryName)) {
                 cate.setLimit(amount);
-                break;
+                return response(inputR, CARD_TITLE, "Limit für " + categoryName + " wurde auf " + amount + " gesetzt");
             }
         }
 
         Category newCate = new Category(categoryName);
         newCate.setLimit(amount);
         dynamoDbMapper.save(newCate);
-        return response(inputR, CARD_TITLE, "Limit für " + categoryName + " wurde auf " + amount + " gesetzt");
+        return response(inputR, CARD_TITLE, "Ich habe " + categoryName + " erstellt und die Limit auf " + amount + " gesetzt");
     }
 
-    private Optional<Response> getCategoryLimitInfo() {
-        String category = intentRequestR.getIntent().getSlots().get(SLOT_CATEGORY).getValue();
+    private Optional<Response> getCategoryLimitInfo(Intent intent, HandlerInput inputR) {
+        String category = intent.getSlots().get(SLOT_CATEGORY).getValue();
         List<Category> categories = dynamoDbMapper.loadAll(Category.class);
         for (Category cate : categories) {
             if (cate.getName().equalsIgnoreCase(category)) {
