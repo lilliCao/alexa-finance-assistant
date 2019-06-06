@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static amosalexa.handlers.AmosStreamHandler.*;
+import static amosalexa.handlers.PasswordResponseHelper.*;
 import static amosalexa.handlers.ResponseHelper.*;
 
 @Service(
@@ -36,6 +39,8 @@ import static amosalexa.handlers.ResponseHelper.*;
                 "Kontaktname und Geldbetrag festlegen."
 )
 public class ContactTransferServiceHandler implements IntentRequestHandler {
+    private static Logger LOGGER = LoggerFactory.getLogger(ContactTransferServiceHandler.class);
+
     private static final String CONTACT_TRANSFER_INTENT = "ContactTransferIntent";
     private static final String CONTACT_CHOICE_INTENT = "ContactChoiceIntent";
     private static final String PLAIN_CATEGORY_INTENT = "PlainCategoryIntent";
@@ -56,6 +61,7 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
     @Override
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
         return input.matches(Predicates.intentName(CONTACT_TRANSFER_INTENT))
+                || isNumberIntentForPass(input, CONTACT_TRANSFER_INTENT)
                 || input.matches(Predicates.intentName(CONTACT_CHOICE_INTENT))
                 || (input.matches(Predicates.intentName(PLAIN_CATEGORY_INTENT))
                 && input.getAttributesManager().getSessionAttributes().containsKey(SAVE_TRANSACTION_ID));
@@ -63,27 +69,31 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput input, IntentRequest intentRequest) {
-        switch (intentRequest.getIntent().getName()) {
+        LOGGER.info("handle transfer to contact request");
+        Optional<Response> response = checkPin(input, intentRequest, true);
+        if (response.isPresent()) return response;
+        Intent intent = getRealIntent(input, intentRequest);
+        switch (intent.getName()) {
             case CONTACT_TRANSFER_INTENT:
-                switch (intentRequest.getIntent().getConfirmationStatus()) {
+                switch (intent.getConfirmationStatus()) {
                     case NONE:
-                        return contactTransferAction(input, intentRequest);
+                        return contactTransferAction(input, intent);
                     case CONFIRMED:
                         return transfer(input);
                     default:
                         return response(input, CARD_TITLE);
                 }
             case CONTACT_CHOICE_INTENT:
-                return contactChoiceAction(input, intentRequest);
+                return contactChoiceAction(input, intent);
             default:
                 //PLAIN_CATEGORY_INTENT:
-                return addCategory(input, intentRequest);
+                return addCategory(input, intent);
         }
     }
 
-    private Optional<Response> addCategory(HandlerInput inputReceived, IntentRequest intentRequestReceived) {
-        if (intentRequestReceived.getIntent().getSlots().get(SLOT_CATEGORY) != null) {
-            String categoryName = intentRequestReceived.getIntent().getSlots().get(SLOT_CATEGORY).getValue();
+    private Optional<Response> addCategory(HandlerInput inputReceived, Intent intent) {
+        if (intent.getSlots().get(SLOT_CATEGORY) != null) {
+            String categoryName = intent.getSlots().get(SLOT_CATEGORY).getValue();
             List<Category> categories = dynamoDbMapper.loadAll(Category.class);
             for (Category category : categories) {
                 if (category.getName().equalsIgnoreCase(categoryName)) {
@@ -97,10 +107,10 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
         return response(inputReceived, CARD_TITLE, "Ich konnte die Kategorie nicht finden. Tschüss");
     }
 
-    private Optional<Response> contactChoiceAction(HandlerInput inputReceived, IntentRequest intentRequestReceived) {
+    private Optional<Response> contactChoiceAction(HandlerInput inputReceived, Intent intent) {
         int choice;
         try {
-            choice = Integer.parseInt(intentRequestReceived.getIntent().getSlots().get(SLOT_CONTACT_INDEX).getValue());
+            choice = Integer.parseInt(intent.getSlots().get(SLOT_CONTACT_INDEX).getValue());
         } catch (NumberFormatException ignored) {
             return responseDelegate(inputReceived, CARD_TITLE,
                     "Ich habe leider nicht verstanden welche Person du meinst. Bitte wiederhole.",
@@ -110,27 +120,25 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
             Contact contact = contacts.get(choice - 1);
             return confirmTransfer(inputReceived, Intent.builder().withName(CONTACT_TRANSFER_INTENT).build(), contact);
         } else {
-            return responseDelegate(inputReceived, CARD_TITLE,
-                    "Bitte wähle eine andere Index.",
-                    Intent.builder().withName(CONTACT_CHOICE_INTENT).build());
+            return responseContinue(inputReceived, CARD_TITLE,
+                    "Bitte wähle eine andere Index.");
         }
     }
 
-    private Optional<Response> contactTransferAction(HandlerInput inputReceived, IntentRequest intentRequestReceived) {
-        Map<String, Slot> slots = intentRequestReceived.getIntent().getSlots();
+    private Optional<Response> contactTransferAction(HandlerInput inputReceived, Intent intent) {
+        LOGGER.info("search for contacts");
+        Map<String, Slot> slots = intent.getSlots();
         String name = slots.get(SLOT_CONTACT).getValue().toLowerCase();
 
         double amount = Double.parseDouble(slots.get(SLOT_AMOUNT_EURO).getValue());
-        Map<String, Object> sessionAttributes = inputReceived.getAttributesManager().getSessionAttributes();
-        sessionAttributes.put(SAVE_AMOUNT, amount);
-        inputReceived.getAttributesManager().setSessionAttributes(sessionAttributes);
+        inputReceived.getAttributesManager().getSessionAttributes().put(SAVE_AMOUNT, amount);
 
         List<Contact> contactsFound = queryContact(name);
         if (contactsFound.isEmpty()) {
             String speechText = "Ich konnte keinen Kontakt mit dem Namen: " + name + " finden";
             return response(inputReceived, CARD_TITLE, speechText);
         } else if (contactsFound.size() == 1) {
-            return confirmTransfer(inputReceived, intentRequestReceived.getIntent(), contactsFound.get(0));
+            return confirmTransfer(inputReceived, intent, contactsFound.get(0));
         } else {
             StringBuilder contactListString = new StringBuilder();
             contactListString
@@ -139,18 +147,22 @@ public class ContactTransferServiceHandler implements IntentRequestHandler {
                     .append(" passende Kontakte gefunden. Bitte wähle einen aus: ");
 
             int i = 1;
+            StringBuilder numbers = new StringBuilder();
             for (Contact contact : contactsFound) {
                 contactListString
                         .append("Kontakt Nummer ")
                         .append(i).append(": ")
                         .append(contact.getName())
                         .append(". ");
+                numbers.append(i).append(", ");
                 i++;
             }
-            contactListString.append("Sage zum Beispiel Kontakt Nummer drei oder Nummer drei");
+            contactListString.append("Sage zum Beispiel Kontakt Nummer " + numbers + " oder Nummer " + numbers);
             contacts = contactsFound;
-            return responseDelegate(inputReceived, CARD_TITLE, contactListString.toString(),
-                    Intent.builder().withName(CONTACT_CHOICE_INTENT).build());
+            LOGGER.info("Found " + contacts.size() + " asking for a choice "
+                    + inputReceived.getAttributesManager().getSessionAttributes().toString());
+            // TODO bug report: sessionAttributes can not be updated if dialog is set to COMPLETED -> ResponseDelegate not working
+            return responseContinue(inputReceived, CARD_TITLE, contactListString.toString());
         }
     }
 

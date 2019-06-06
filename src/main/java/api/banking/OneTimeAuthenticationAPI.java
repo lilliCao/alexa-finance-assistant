@@ -12,7 +12,7 @@ public class OneTimeAuthenticationAPI {
 
     public static boolean validateOTP(int code) {
         //return gAuth.authorize(demoSecretSeed, code);
-        return true;
+        return code==3;
     }
 
     // should be done by bank server when the user link the account in alexa

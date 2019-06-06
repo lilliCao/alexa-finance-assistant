@@ -1,10 +1,7 @@
 package amosalexa.handlers;
 
 import amosalexa.AccountFactory;
-import amosalexa.handlers.bankaccount.AccountInformationIntentHandler;
-import amosalexa.handlers.bankaccount.BalanceLimitServiceHandler;
-import amosalexa.handlers.bankaccount.ContactTransferServiceHandler;
-import amosalexa.handlers.bankaccount.StandingOrderServiceHandler;
+import amosalexa.handlers.bankaccount.*;
 import amosalexa.handlers.bankcontact.BankContactServiceHandler;
 import amosalexa.handlers.budgetreport.BudgetReportServiceHandler;
 import amosalexa.handlers.budgettracker.BudgetTrackerServiceHandler;
@@ -43,13 +40,20 @@ public class AmosStreamHandler extends SkillStreamHandler {
                         new SessionEndedRequestHandler(),
                         new FallbackIntentHandler(),
 
-                        new VoicePinHandler(),
-                        new TanHandler(),
+                        //new VoicePinHandler(),
+                        //new TanHandler(),
 
-                        new BalanceLimitServiceHandler(),
+                        //balance
+                        new BalanceLimitGetHandler(),
+                        new BalanceLimitSetHandler(),
                         new AccountInformationIntentHandler(),
                         new ContactTransferServiceHandler(),
-                        new StandingOrderServiceHandler(),
+                        //standingorder
+                        new StandingOrderInfoHandler(),
+                        new StandingOrderDeleteHandler(),
+                        new StandingOrderModifyHandler(),
+                        new StandingOrderKeywordHandler(),
+                        new StandingOrderSmartHandler(),
 
                         new BudgetReportServiceHandler(),
 

@@ -19,6 +19,7 @@ public class FallbackIntentHandler implements RequestHandler {
         return handlerInput.getResponseBuilder()
                 .withSpeech(speech)
                 .withReprompt(speech)
+                .withShouldEndSession(true)
                 .build();
     }
 }

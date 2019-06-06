@@ -22,6 +22,14 @@ public class ResponseHelper {
                 .build();
     }
 
+    public static Optional<Response> responseContinue(HandlerInput input, String cardTitle, String text) {
+        return input.getResponseBuilder()
+                .withSpeech(text)
+                .withSimpleCard(cardTitle, text)
+                .withShouldEndSession(false)
+                .build();
+    }
+
     public static Optional<Response> response(HandlerInput input, String cardTitle) {
         List<String> possibleText = Arrays.asList(
                 "Okay. Verstanden",

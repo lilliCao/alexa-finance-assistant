@@ -1,5 +1,5 @@
 package amosalexa.handlers;
-
+/*
 import amosalexa.handlers.bankaccount.AccountInformationIntentHandler;
 import amosalexa.handlers.bankaccount.BalanceLimitServiceHandler;
 import amosalexa.handlers.bankaccount.StandingOrderServiceHandler;
@@ -245,5 +245,5 @@ public class AmosHandlerTest {
         createIntentRequest("SecuritiesAccountInformationIntent", slots);
         test(handler, ".*");
     }
-
 }
+ */
