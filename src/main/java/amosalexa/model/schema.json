@@ -385,7 +385,12 @@
         },
         {
           "name": "GetBalanceLimitIntent",
-          "slots": [],
+          "slots": [
+            {
+              "name": "VoicePin",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
           "samples": [
             "Wie ist mein Kontolimit",
             "Wie ist das Limit für mein Konto",
@@ -640,7 +645,7 @@
           ],
           "samples": [
             "Kontakt Nummer {ContactIndex}",
-            "{ContactIndex}"
+            "Nummer {ContactIndex}"
           ]
         },
         {
@@ -769,6 +774,61 @@
         {
           "name": "AMAZON.NavigateHomeIntent",
           "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "NumberIntent",
+          "slots": [
+            {
+              "name": "NUM_A",
+              "type": "CUSTOM_NUMBER"
+            },
+            {
+              "name": "NUM_B",
+              "type": "CUSTOM_NUMBER"
+            },
+            {
+              "name": "NUM_C",
+              "type": "CUSTOM_NUMBER"
+            },
+            {
+              "name": "NUM_D",
+              "type": "CUSTOM_NUMBER"
+            },
+            {
+              "name": "NUM_E",
+              "type": "CUSTOM_NUMBER"
+            },
+            {
+              "name": "NUM_F",
+              "type": "CUSTOM_NUMBER"
+            },
+            {
+              "name": "NUM_G",
+              "type": "CUSTOM_NUMBER"
+            },
+            {
+              "name": "NUM_H",
+              "type": "CUSTOM_NUMBER"
+            }
+          ],
+          "samples": [
+            "{NUM_A}",
+            "{NUM_A} {NUM_B} ",
+            "{NUM_A} {NUM_B} {NUM_C}",
+            " {NUM_A} {NUM_B} {NUM_C} {NUM_D}",
+            " {NUM_A} {NUM_B} {NUM_C} {NUM_D} {NUM_E}",
+            " {NUM_A} {NUM_B} {NUM_C} {NUM_D} {NUM_E} {NUM_F}",
+            " {NUM_A} {NUM_B} {NUM_C} {NUM_D} {NUM_E} {NUM_F} {NUM_G}",
+            " {NUM_A} {NUM_B} {NUM_C} {NUM_D} {NUM_E} {NUM_F} {NUM_G} {NUM_H}"
+          ]
         }
       ],
       "types": [
@@ -1143,6 +1203,126 @@
             {
               "name": {
                 "value": "Bob"
+              }
+            }
+          ]
+        },
+        {
+          "name": "CUSTOM_NUMBER",
+          "values": [
+            {
+              "id": "0",
+              "name": {
+                "value": "null",
+                "synonyms": [
+                  "nuhl",
+                  "zero",
+                  "oh",
+                  "nui"
+                ]
+              }
+            },
+            {
+              "id": "1",
+              "name": {
+                "value": "eins",
+                "synonyms": [
+                  "oans",
+                  "oins",
+                  "eens",
+                  "eine"
+                ]
+              }
+            },
+            {
+              "id": "2",
+              "name": {
+                "value": "zwei",
+                "synonyms": [
+                  "zwoa",
+                  "zweije",
+                  "zweh",
+                  "zwo"
+                ]
+              }
+            },
+            {
+              "id": "3",
+              "name": {
+                "value": "drei",
+                "synonyms": [
+                  "drey",
+                  "dreije",
+                  "trei"
+                ]
+              }
+            },
+            {
+              "id": "4",
+              "name": {
+                "value": "vier",
+                "synonyms": [
+                  "viah",
+                  "viere",
+                  "fier"
+                ]
+              }
+            },
+            {
+              "id": "5",
+              "name": {
+                "value": "fünf",
+                "synonyms": [
+                  "fümfe",
+                  "fünfe",
+                  "fümf",
+                  "finf"
+                ]
+              }
+            },
+            {
+              "id": "6",
+              "name": {
+                "value": "sechs",
+                "synonyms": [
+                  "sexe"
+                ]
+              }
+            },
+            {
+              "id": "7",
+              "name": {
+                "value": "sieben",
+                "synonyms": [
+                  "simme",
+                  "siam",
+                  "siehme",
+                  "siem"
+                ]
+              }
+            },
+            {
+              "id": "8",
+              "name": {
+                "value": "acht",
+                "synonyms": [
+                  "ocht",
+                  "ochte",
+                  "achten",
+                  "achte",
+                  "ochde"
+                ]
+              }
+            },
+            {
+              "id": "9",
+              "name": {
+                "value": "neun",
+                "synonyms": [
+                  "nein",
+                  "neine",
+                  "noin"
+                ]
               }
             }
           ]
