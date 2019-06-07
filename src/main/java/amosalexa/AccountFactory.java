@@ -109,6 +109,9 @@ public class AccountFactory {
     private void createDemoUser() {
         User user = new User();
         user.setId(USER_ID);
+        user.setSecretSeed("BIRAKXJN42SDFMMU");
+        user.setSecretQR("https://chart.googleapis.com/chart?chs=200x200&chld=M%7C0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2Fissuer%3AaccountName%3Fsecret%3DBIRAKXJN42SDFMMU%26issuer%3Dissuer");
+        user.setVoicePin("1234");
         DynamoDbMapper.getInstance().save(user);
     }
 

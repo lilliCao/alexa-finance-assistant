@@ -1,5 +1,6 @@
 package amosalexa.handlers;
 
+import api.banking.OneTimeAuthenticationAPI;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.*;
 import com.amazon.ask.model.slu.entityresolution.StatusCode;
@@ -10,12 +11,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static amosalexa.handlers.AmosStreamHandler.USER_ID;
+import static amosalexa.handlers.AmosStreamHandler.dynamoDbMapper;
 import static amosalexa.handlers.ResponseHelper.response;
 import static amosalexa.handlers.ResponseHelper.responseContinue;
 
 public class PasswordResponseHelper {
     private static final String NUMBER_INTENT = "NumberIntent";
     private static final String INTENT_NAME = "IntentName";
+    private static final int PIN_VALID_TIME = 10;
     private static Logger LOGGER = LoggerFactory.getLogger(PasswordResponseHelper.class);
     private static final String SLOT_NUM_A = "NUM_A";
     private static final String SLOT_NUM_B = "NUM_B";
@@ -80,6 +84,15 @@ public class PasswordResponseHelper {
         }
 
         Map<String, Object> sessionAttributes = input.getAttributesManager().getSessionAttributes();
+        if(isPinValid()) {
+            LOGGER.info("Valid pin. Skip pin check");
+            if(!sessionAttributes.containsKey(STATE)) sessionAttributes.put(STATE, CHECKPIN_DONE);
+            if(!sessionAttributes.containsKey(INTENT_NAME)) {
+                sessionAttributes.put(INTENT, intentRequest.getIntent());
+                sessionAttributes.put(INTENT_NAME, intentRequest.getIntent().getName());
+            }
+        }
+
         if (!sessionAttributes.containsKey(STATE)) {
             LOGGER.info("Ask for pin");
             sessionAttributes.put(INTENT, intentRequest.getIntent());
@@ -91,11 +104,13 @@ public class PasswordResponseHelper {
 
         String state = (String) sessionAttributes.get(STATE);
 
+        model.db.User user = (model.db.User) dynamoDbMapper.load(model.db.User.class, USER_ID);
+
         if (state.equals(CHECKPIN_START)) {
             LOGGER.info("Get pin");
             String pin = getNumbers(intentRequest.getIntent());
             LOGGER.info("Check pin = " + pin);
-            if (!pin.equalsIgnoreCase("1234")) {
+            if (!pin.equalsIgnoreCase(user.getVoicePin())) {
                 int trial = (Integer) sessionAttributes.get("trial");
                 if (trial < 3) {
                     LOGGER.info("wrong pin. reask pin");
@@ -106,6 +121,9 @@ public class PasswordResponseHelper {
                 return response(input, "Anfrage abbrechen", "Deine angegebene PIN ist falsch. Ich breche jetzt den Prozess ab");
 
             }
+
+            user.setGainVoicePinTime(System.currentTimeMillis());
+            dynamoDbMapper.save(user);
 
             sessionAttributes.put(STATE, CHECKPIN_DONE);
         }
@@ -129,9 +147,9 @@ public class PasswordResponseHelper {
 
         if (state.equals(CHECKTAN_START)) {
             LOGGER.info("Get tan");
-            String pin = getNumbers(intentRequest.getIntent());
-            LOGGER.info("Check tan = " + pin);
-            if (!pin.equalsIgnoreCase("123456")) {
+            String tan = getNumbers(intentRequest.getIntent());
+            LOGGER.info("Check tan = " + tan);
+            if (!OneTimeAuthenticationAPI.validateOTP(Integer.parseInt(tan))) {
                 int trial = (Integer) sessionAttributes.get("trial");
                 if (trial < 3) {
                     LOGGER.info("wrong tan. reask tan");
@@ -171,9 +189,9 @@ public class PasswordResponseHelper {
 
     private static Optional<Response> askPin(HandlerInput input, boolean reask) {
         List<String> possibleText = Arrays.asList(
-                "Nenne mir bitte deine Voice PIN",
-                "Sage mir bitte deine PIN",
-                "deine Voice PIN bitte"
+                "Deine alte session ist abgelaufen. Nenne mir bitte deine Voice PIN",
+                "Deine alte session ist abgelaufen. Sage mir bitte deine PIN",
+                "Deine alte session ist abgelaufen. deine Voice PIN bitte"
         );
         List<String> possibleReask = Arrays.asList(
                 "Deine angegebene Pin ist falsch. Bitte korrigiere es.",
@@ -205,5 +223,13 @@ public class PasswordResponseHelper {
 
         return responseContinue(input, "Überprüfe TAN", text);
 
+    }
+
+    private static boolean isPinValid() {
+        model.db.User user = (model.db.User) dynamoDbMapper.load(model.db.User.class, USER_ID);
+        long gainPinTime = user.getGainVoicePinTime();
+        long diff = (System.currentTimeMillis() - gainPinTime)/60000;
+        LOGGER.info("Pin valid since min = "+diff);
+        return  diff < PIN_VALID_TIME;
     }
 }

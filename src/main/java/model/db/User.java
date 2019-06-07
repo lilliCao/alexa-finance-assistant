@@ -11,6 +11,10 @@ public class User {
     private long balanceLimit;
     private String accessToken;
     private String accessTokenExpiryTime;
+    private String secretSeed;
+    private String secretQR;
+    private String voicePin;
+    private long gainVoicePinTime;
 
     public User() {
     }
@@ -49,6 +53,42 @@ public class User {
 
     public void setAccessTokenExpiryTime(String accessTokenExpiryTime) {
         this.accessTokenExpiryTime = accessTokenExpiryTime;
+    }
+
+    @DynamoDBAttribute
+    public String getSecretSeed() {
+        return secretSeed;
+    }
+
+    public void setSecretSeed(String secretSeed) {
+        this.secretSeed = secretSeed;
+    }
+
+    @DynamoDBAttribute
+    public String getSecretQR() {
+        return secretQR;
+    }
+
+    public void setSecretQR(String secretQR) {
+        this.secretQR = secretQR;
+    }
+
+    @DynamoDBAttribute
+    public String getVoicePin() {
+        return voicePin;
+    }
+
+    public void setVoicePin(String voicePin) {
+        this.voicePin = voicePin;
+    }
+
+    @DynamoDBAttribute
+    public long getGainVoicePinTime() {
+        return gainVoicePinTime;
+    }
+
+    public void setGainVoicePinTime(long gainVoicePinTime) {
+        this.gainVoicePinTime = gainVoicePinTime;
     }
 
 }
