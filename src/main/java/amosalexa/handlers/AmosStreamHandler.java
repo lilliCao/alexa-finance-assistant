@@ -81,6 +81,7 @@ public class AmosStreamHandler extends SkillStreamHandler {
                 )
                 //.withSkillId("amzn1.ask.skill.41bcb0a0-9336-4dc6-b8dd-e145531c8ec5") comment because of lambda verification problem
                 .addExceptionHandler(new GenericExceptionHandler())
+                .addRequestInterceptor(new AmosRequestInterceptor())
                 .build();
     }
 

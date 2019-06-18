@@ -101,7 +101,8 @@ public class AuthenticationAPI {
             map.add("username", "anton");
             map.add("password", "anton");
             map.add("grant_type", "password");
-            map.add("client_id", "public_auth");
+            map.add("client_id", "api");
+            map.add("client_secret", "12f32e0c-dba2-4d33-8c29-9e97677b2baf");
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 

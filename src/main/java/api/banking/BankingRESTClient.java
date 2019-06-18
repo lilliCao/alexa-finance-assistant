@@ -1,5 +1,6 @@
 package api.banking;
 
+import amosalexa.handlers.AmosRequestInterceptor;
 import configuration.ConfigurationAMOS;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -58,12 +59,20 @@ public class BankingRESTClient {
      */
     public static HttpHeaders generateHttpHeaders() {
         log.info("generateHttpHeaders");
-        // Refresh the user's access token if necessary
-        AuthenticationAPI.updateAccessToken(USER_ID);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + AuthenticationAPI.getAccessToken(USER_ID));
+        String token=AmosRequestInterceptor.accessToken;
+
+        if(token==null || token.isEmpty()) {
+            // use for creating demo account
+            // Refresh the user's access token if necessary
+            AuthenticationAPI.updateAccessToken(USER_ID);
+            token = AuthenticationAPI.getAccessToken(USER_ID);
+        }
+
+        headers.set("Authorization", "Bearer " + token);
+        log.info("token = "+token);
         return headers;
     }
 
