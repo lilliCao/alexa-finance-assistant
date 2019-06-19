@@ -62,17 +62,18 @@ public class BankingRESTClient {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        String token=AmosRequestInterceptor.accessToken;
+        String token = AmosRequestInterceptor.accessToken;
 
-        if(token==null || token.isEmpty()) {
+        if (token == null || token.isEmpty()) {
             // use for creating demo account
             // Refresh the user's access token if necessary
+            log.info("get token manual");
             AuthenticationAPI.updateAccessToken(USER_ID);
             token = AuthenticationAPI.getAccessToken(USER_ID);
         }
 
         headers.set("Authorization", "Bearer " + token);
-        log.info("token = "+token);
+        log.info("token = " + token);
         return headers;
     }
 

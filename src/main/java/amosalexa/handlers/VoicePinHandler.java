@@ -14,6 +14,11 @@ import java.util.Random;
 
 import static amosalexa.handlers.ResponseHelper.response;
 
+/**
+ * This class checks voice pin as a number for any intent with a type of VoicePin.
+ * Since Alexa can not recognize german number as digits e.g. 4321=ViertausendDreihundertEinsundZwanzig,
+ * the work around class PasswordResponseHelper is used instead.
+ */
 public class VoicePinHandler implements IntentRequestHandler {
     private static final String CARD_TITLE = "Voice Pin";
     private static final String SLOT_VOICE_PIN = "VoicePin";

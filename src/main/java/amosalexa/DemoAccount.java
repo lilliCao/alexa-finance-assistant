@@ -20,7 +20,7 @@ public class DemoAccount {
         // create demo account from scratch
         createDemoAccount();
         // get current account information
-        //getAllDatabaseInfo();
+        getAllDatabaseInfo();
     }
 
     public static void createDemoAccount() throws InterruptedException {

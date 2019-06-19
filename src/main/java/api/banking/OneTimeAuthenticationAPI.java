@@ -1,9 +1,6 @@
 package api.banking;
 
-import api.aws.DynamoDbMapper;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
-import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
-import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 import model.db.User;
 
 import static amosalexa.handlers.AmosStreamHandler.USER_ID;

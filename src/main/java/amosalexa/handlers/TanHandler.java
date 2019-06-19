@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+/**
+ * This class checks tan as a number for any intent with a type of TanCode.
+ * Since Alexa can not recognize german number as digits e.g. 4321=ViertausendDreihundertEinsundZwanzig,
+ * the work around class PasswordResponseHelper is used instead.
+ */
 public class TanHandler implements IntentRequestHandler {
     private static final String CARD_TITLE = "TAN Code";
     private static final String SLOT_TAN = "TanCode";

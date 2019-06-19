@@ -39,8 +39,6 @@ public class AccountInformationIntentHandler implements IntentRequestHandler {
 
     @Override
     public boolean canHandle(HandlerInput input, IntentRequest intentRequest) {
-        LOGGER.info("intent = " + intentRequest.getIntent().getName() + "match real intent="
-                + input.matches(Predicates.intentName(ACCOUNT_INFORMATION_INTENT)));
         return input.matches(Predicates.intentName(ACCOUNT_INFORMATION_INTENT))
                 || isNumberIntentForPass(input, ACCOUNT_INFORMATION_INTENT);
     }

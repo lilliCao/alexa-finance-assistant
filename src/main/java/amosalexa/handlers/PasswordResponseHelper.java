@@ -16,6 +16,9 @@ import static amosalexa.handlers.AmosStreamHandler.dynamoDbMapper;
 import static amosalexa.handlers.ResponseHelper.response;
 import static amosalexa.handlers.ResponseHelper.responseContinue;
 
+/**
+ * This work around class helps check pin and tan as digits.
+ */
 public class PasswordResponseHelper {
     private static final String NUMBER_INTENT = "NumberIntent";
     private static final String INTENT_NAME = "IntentName";
@@ -84,10 +87,10 @@ public class PasswordResponseHelper {
         }
 
         Map<String, Object> sessionAttributes = input.getAttributesManager().getSessionAttributes();
-        if(isPinValid()) {
+        if (isPinValid()) {
             LOGGER.info("Valid pin. Skip pin check");
-            if(!sessionAttributes.containsKey(STATE)) sessionAttributes.put(STATE, CHECKPIN_DONE);
-            if(!sessionAttributes.containsKey(INTENT_NAME)) {
+            if (!sessionAttributes.containsKey(STATE)) sessionAttributes.put(STATE, CHECKPIN_DONE);
+            if (!sessionAttributes.containsKey(INTENT_NAME)) {
                 sessionAttributes.put(INTENT, intentRequest.getIntent());
                 sessionAttributes.put(INTENT_NAME, intentRequest.getIntent().getName());
             }
@@ -228,8 +231,8 @@ public class PasswordResponseHelper {
     private static boolean isPinValid() {
         model.db.User user = (model.db.User) dynamoDbMapper.load(model.db.User.class, USER_ID);
         long gainPinTime = user.getGainVoicePinTime();
-        long diff = (System.currentTimeMillis() - gainPinTime)/60000;
-        LOGGER.info("Pin valid since min = "+diff);
-        return  diff < PIN_VALID_TIME;
+        long diff = (System.currentTimeMillis() - gainPinTime) / 60000;
+        LOGGER.info("Pin valid since min = " + diff);
+        return diff < PIN_VALID_TIME;
     }
 }

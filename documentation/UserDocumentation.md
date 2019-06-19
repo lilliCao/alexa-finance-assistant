@@ -2,9 +2,22 @@
 
 Dieser Skill erweitert Amazons Sprachassistenten Alexa um verschiedene Funktionen aus dem Finanzbereich. Neben dem Abruf von grundlegenden Konto- und Depotinformationen können Überweisungen getätigt und Kredit- sowie EC-Karten verwaltet werden. Außerdem erlaubt der Skill die Erstellung von Sparplänen und Daueraufträgen.
 
-## Installation
+## Installation (dev)
 
-[Derzeit nicht relevant, da der Skill nicht öffentlich zugänglich ist]
+- Überprüfe ob config datei vorhanden ist: configuration.AmosConfiguration
+- Überprüfe ob backend funktioniert: 
+    * [bank server](http://ec2-18-184-56-83.eu-central-1.compute.amazonaws.com)
+    * [keycloak authentication server](https://amos.franken-hosting.de/auth)
+- Configuriere Alexa Skill in Developer Console: 
+    * importiere die schema.json file unter amosalexa.model
+    * configuriere die Account Linking mit keycloak (Authentication Code Grant)
+    * configuriere Endpoint mit Lambda function in dem nächsten Schritt
+- Configuriere Lambda Function `testAmos` mit handler=AmosStreamHandler und skill id, amazon s3 bucker `amos-alexa` wie in update_lambda.sh
+- Run `DemoAccount`, um einen demo Account anzulegen bzw. die Daten in Datenbank im Überblick zu haben
+- Run `gradle build`: wird den Code zusammenbauen und automatisch den Lambda function aktualisieren
+- Amos kann jetzt im Developer Console unter Test getestet werden. Der default VoicePin = 1234, Der tan kann von Authentication App generiert werden ([qr code](https://chart.googleapis.com/chart?chs=200x200&chld=M%7C0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2Fissuer%3AaccountName%3Fsecret%3DBIRAKXJN42SDFMMU%26issuer%3Dissuer) ).
+- Alexa Skill, bzw. Skill Test kann entweder in der Developer Console gebaut und getestet, oder auch in ASK cli usw.
+
 
 ## Grundlegende Verwendung
 

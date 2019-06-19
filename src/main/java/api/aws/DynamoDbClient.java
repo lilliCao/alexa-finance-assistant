@@ -6,11 +6,11 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.model.*;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.GetItemResult;
+import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import configuration.ConfigurationAMOS;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -26,7 +26,7 @@ public class DynamoDbClient {
         dynamoDB = getAmazonDynamoDBClient();
     }
 
-    public static AmazonDynamoDB getAmazonDynamoDBClient(){
+    public static AmazonDynamoDB getAmazonDynamoDBClient() {
         AWSCredentials awsCredentails = new BasicAWSCredentials(ConfigurationAMOS.awsAccessKey, ConfigurationAMOS.awsSecretKey);
         dynamoDB = AmazonDynamoDBClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentails))
